@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('title'); // Título de la tarea
-            $table->text('description'); // Descripción de la tarea
+            $table->text('description')->nullable(); // Descripción de la tarea
+            $table->string('assigned_to')->nullable(); // Persona asignada a la tarea
             $table->boolean('completed')->default(false); // Estado de la tarea
             $table->timestamps();
         });

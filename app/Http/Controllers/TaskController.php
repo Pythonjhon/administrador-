@@ -7,72 +7,86 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+    /**
+     * Muestra la lista de tareas.
+     */
     public function index(Request $request)
     {
         $filter = $request->query('filter');
-    
-        $query = Task::query();
-    
-        if ($filter === 'completed') {
-            $query->where('completed', true);
-        } elseif ($filter === 'pending') {
-            $query->where('completed', false);
-        }
-    
-        $tasks = $query->paginate(5); // Paginación de 5 tareas por página
-    
+
+        $tasks = Task::when($filter === 'completed', fn($query) => $query->where('completed', true))
+                     ->when($filter === 'pending', fn($query) => $query->where('completed', false))
+                     ->paginate(10);
+
         return view('tasks.index', compact('tasks', 'filter'));
     }
 
-    public function create() {
+    /**
+     * Muestra el formulario de creación de tareas.
+     */
+    public function create()
+    {
         return view('tasks.create');
     }
 
+    /**
+     * Almacena una nueva tarea.
+     */
     public function store(Request $request)
-{
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'description' => 'nullable|string',
-    ]);
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'assigned_to' => 'required|string|max:255', // Validación para la persona asignada
+        ]);
 
-    Task::create($request->all());
+        Task::create($request->all());
 
-    return redirect()->route('tasks.index')->with('success', 'Tarea creada exitosamente.');
-}
+        return redirect()->route('tasks.index')->with('success', 'Tarea creada correctamente.');
+    }
 
-
-    public function edit($id) {
-        $task = Task::findOrFail($id);
+    /**
+     * Muestra el formulario de edición de tareas.
+     */
+    public function edit(Task $task)
+    {
         return view('tasks.edit', compact('task'));
     }
 
+    /**
+     * Actualiza una tarea.
+     */
     public function update(Request $request, Task $task)
-{
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'description' => 'nullable|string',
-    ]);
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'assigned_to' => 'required|string|max:255', // Validación para la persona asignada
+            'completed' => 'boolean',
+        ]);
 
-    $task->update($request->all());
+        $task->update($request->all());
 
-    return redirect()->route('tasks.index')->with('success', 'Tarea actualizada correctamente.');
-}
+        return redirect()->route('tasks.index')->with('success', 'Tarea actualizada correctamente.');
+    }
 
-public function destroy(Task $task)
-{
-    $task->delete();
+    /**
+     * Cambia el estado de la tarea.
+     */
+    public function toggle(Task $task)
+    {
+        $task->update(['completed' => !$task->completed]);
 
-    return redirect()->route('tasks.index')->with('success', 'Tarea eliminada.');
-}
+        return redirect()->route('tasks.index')->with('success', 'Estado de la tarea actualizado.');
+    }
 
-public function toggle(Task $task)
-{
-    $task->completed = !$task->completed;
-    $task->save();
+    /**
+     * Elimina una tarea.
+     */
+    public function destroy(Task $task)
+    {
+        $task->delete();
 
-    $message = $task->completed ? 'Tarea marcada como completada.' : 'Tarea marcada como pendiente.';
-
-    return redirect()->route('tasks.index')->with('success', $message);
-}
-
+        return redirect()->route('tasks.index')->with('success', 'Tarea eliminada correctamente.');
+    }
 }
