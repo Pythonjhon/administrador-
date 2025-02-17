@@ -27,9 +27,22 @@
             margin: 8px 0;
             border-radius: 5px;
             font-weight: 500;
+            transition: background-color 0.3s ease;
         }
         .sidebar a:hover, .sidebar .active {
             background: #198754;
+        }
+        .home-link {
+            background: #212529 !important;
+            margin-top: auto !important;
+        }
+        .home-link:hover {
+            background: #198754 !important;
+        }
+        .sidebar-content {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 40px);
         }
         .content {
             margin-left: 270px;
@@ -48,11 +61,16 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <h4 class="text-center mb-3">📌 Panel de Tareas</h4>
-        <a href="{{ route('tasks.index') }}" class="{{ !$filter ? 'active' : '' }}">📋 Todas las Tareas</a>
-        <a href="{{ route('tasks.index', ['filter' => 'completed']) }}" class="{{ $filter === 'completed' ? 'active' : '' }}">✅ Completadas</a>
-        <a href="{{ route('tasks.index', ['filter' => 'pending']) }}" class="{{ $filter === 'pending' ? 'active' : '' }}">⏳ Pendientes</a>
-        <a href="{{ route('tasks.create') }}" class="btn btn-success w-100 mt-3">+ Nueva Tarea</a>
+        <div class="sidebar-content">
+            <h4 class="text-center mb-3">📌 Panel de Tareas</h4>
+            <a href="{{ route('tasks.index') }}" class="{{ !$filter ? 'active' : '' }}">📋 Todas las Tareas</a>
+            <a href="{{ route('tasks.index', ['filter' => 'completed']) }}" class="{{ $filter === 'completed' ? 'active' : '' }}">✅ Completadas</a>
+            <a href="{{ route('tasks.index', ['filter' => 'pending']) }}" class="{{ $filter === 'pending' ? 'active' : '' }}">⏳ Pendientes</a>
+            <a href="{{ route('tasks.create') }}" class="btn btn-success w-100 mt-3">+ Nueva Tarea</a>
+            
+            <!-- Enlace a página principal -->
+            <a href="{{ route('welcome') }}" class="home-link mt-auto">🏠 Volver a Inicio</a>
+        </div>
     </div>
 
     <!-- Contenido Principal -->
