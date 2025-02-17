@@ -14,5 +14,7 @@ class Task extends Model
         'description',
         'assigned_to', // Persona asignada a la tarea
         'completed',
+        'file_path', // Ruta del archivo subido
+        'image', // img
     ];
 }

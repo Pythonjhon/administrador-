@@ -12,7 +12,7 @@
         }
         .sidebar {
             width: 250px;
-            background: #218838;;
+            background: #218838;
             color: white;
             padding: 20px;
             position: fixed;
@@ -27,7 +27,7 @@
             border-radius: 5px;
         }
         .sidebar a:hover, .sidebar .active {
-            background: #218838;;
+            background: #1c7430;
         }
         .content {
             margin-left: 270px;
@@ -61,7 +61,7 @@
             </div>
         @endif
 
-        <form action="{{ route('tasks.update', $task->id) }}" method="POST" class="card p-4 shadow">
+        <form action="{{ route('tasks.update', $task->id) }}" method="POST" class="card p-4 shadow" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -86,6 +86,18 @@
                     <option value="0" {{ !$task->completed ? 'selected' : '' }}>Pendiente</option>
                     <option value="1" {{ $task->completed ? 'selected' : '' }}>Completada</option>
                 </select>
+            </div>
+
+            <!-- Campo para la imagen -->
+            <div class="mb-3">
+                <label for="image" class="form-label">Imagen:</label>
+                <input type="file" name="image" id="image" class="form-control">
+                @if($task->image)
+                    <div class="mt-2">
+                        <p>Imagen actual:</p>
+                        <img src="{{ asset('storage/' . $task->image) }}" alt="Imagen de la tarea" width="150">
+                    </div>
+                @endif
             </div>
 
             <button type="submit" class="btn btn-success">💾 Guardar Cambios</button>

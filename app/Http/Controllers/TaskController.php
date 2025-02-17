@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TaskController extends Controller
 {
@@ -33,17 +34,30 @@ class TaskController extends Controller
      * Almacena una nueva tarea.
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'assigned_to' => 'required|string|max:255', // Validación para la persona asignada
-        ]);
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'assigned_to' => 'required|string|max:255',
+        'completed' => 'required|boolean',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Validación de imagen
+    ]);
 
-        Task::create($request->all());
-
-        return redirect()->route('tasks.index')->with('success', 'Tarea creada correctamente.');
+    $imagePath = null;
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('tasks', 'public'); // Guarda la imagen en storage/app/public/tasks
     }
+
+    Task::create([
+        'title' => $request->title,
+        'description' => $request->description,
+        'assigned_to' => $request->assigned_to,
+        'completed' => $request->completed,
+        'image' => $imagePath,
+    ]);
+
+    return redirect()->route('tasks.index')->with('success', 'Tarea creada con éxito.');
+}
 
     /**
      * Muestra el formulario de edición de tareas.
@@ -56,19 +70,28 @@ class TaskController extends Controller
     /**
      * Actualiza una tarea.
      */
-    public function update(Request $request, Task $task)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'assigned_to' => 'required|string|max:255', // Validación para la persona asignada
-            'completed' => 'boolean',
-        ]);
+    
+public function update(Request $request, Task $task)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'assigned_to' => 'required|string|max:255',
+        'completed' => 'required|boolean',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+    ]);
 
-        $task->update($request->all());
-
-        return redirect()->route('tasks.index')->with('success', 'Tarea actualizada correctamente.');
+    if ($request->hasFile('image')) {
+        if ($task->image) {
+            Storage::delete('public/' . $task->image); // Elimina la imagen anterior si existe
+        }
+        $task->image = $request->file('image')->store('tasks', 'public');
     }
+
+    $task->update($request->only(['title', 'description', 'assigned_to', 'completed', 'image']));
+
+    return redirect()->route('tasks.index')->with('success', 'Tarea actualizada con éxito.');
+}
 
     /**
      * Cambia el estado de la tarea.

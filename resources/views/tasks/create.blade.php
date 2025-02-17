@@ -36,7 +36,7 @@
             </div>
         @endif
 
-        <form action="{{ route('tasks.store') }}" method="POST">
+        <form action="{{ route('tasks.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="mb-3">
@@ -60,6 +60,11 @@
                     <option value="0" selected>Pendiente</option>
                     <option value="1">Completada</option>
                 </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">🖼️ Imagen:</label>
+                <input type="file" name="image" id="image" class="form-control">
             </div>
 
             <div class="d-flex justify-content-between">

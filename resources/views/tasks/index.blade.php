@@ -9,10 +9,11 @@
         body {
             display: flex;
             min-height: 100vh;
+            background-color: #f8f9fa;
         }
         .sidebar {
             width: 250px;
-            background: #343a40;
+            background: #212529;
             color: white;
             padding: 20px;
             position: fixed;
@@ -22,45 +23,52 @@
             color: white;
             text-decoration: none;
             display: block;
-            padding: 10px;
-            margin: 5px 0;
+            padding: 12px;
+            margin: 8px 0;
             border-radius: 5px;
+            font-weight: 500;
         }
         .sidebar a:hover, .sidebar .active {
-            background: #218838;;
+            background: #198754;
         }
         .content {
             margin-left: 270px;
             flex-grow: 1;
-            padding: 20px;
-            width: 100%;
+            padding: 30px;
+        }
+        .task-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
     <!-- Sidebar -->
-    <div class="sidebar" style="background: #28a745;">
-        <h4 class="text-center">Panel de Tareas</h4>
+    <div class="sidebar">
+        <h4 class="text-center mb-3">📌 Panel de Tareas</h4>
         <a href="{{ route('tasks.index') }}" class="{{ !$filter ? 'active' : '' }}">📋 Todas las Tareas</a>
         <a href="{{ route('tasks.index', ['filter' => 'completed']) }}" class="{{ $filter === 'completed' ? 'active' : '' }}">✅ Completadas</a>
         <a href="{{ route('tasks.index', ['filter' => 'pending']) }}" class="{{ $filter === 'pending' ? 'active' : '' }}">⏳ Pendientes</a>
-        <a href="{{ route('tasks.create') }}" class="btn btn-primary w-100 mt-3">+ Nueva Tarea</a>
+        <a href="{{ route('tasks.create') }}" class="btn btn-success w-100 mt-3">+ Nueva Tarea</a>
     </div>
 
     <!-- Contenido Principal -->
     <div class="content">
-        <h2 class="mb-4">📋 Lista de Tareas</h2>
+        <h2 class="mb-4 text-dark">📋 Lista de Tareas</h2>
 
-        <div class="table-responsive" >
-            <table class="table table-hover" >
-                <thead class="table-dark" >
-                    <tr >
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
                         <th>ID</th>
+                        <th>Imagen</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
                         <th>Asignado a</th>
-                        <th>Fecha de Creación</th>
+                        <th>Creación</th>
                         <th>Última Actualización</th>
                         <th>Estado</th>
                         <th>Acciones</th>
@@ -70,6 +78,9 @@
                     @foreach($tasks as $task)
                         <tr>
                             <td>{{ $task->id }}</td>
+                            <td>
+                                <img src="{{ asset('storage/' . $task->image) }}" alt="Imagen de la tarea" class="task-image">
+                            </td>
                             <td>{{ $task->title }}</td>
                             <td>{{ $task->description }}</td>
                             <td>{{ $task->assigned_to }}</td>
@@ -85,15 +96,15 @@
                                     <form action="{{ route('tasks.toggle', $task->id) }}" method="POST">
                                         @csrf
                                         @method('PUT')
-                                        <button type="submit" class="btn btn-sm {{ $task->completed ? 'btn-outline-warning' : 'btn-outline-success' }}">
-                                            {{ $task->completed ? 'Pendiente' : 'Completada' }}
+                                        <button type="submit" class="btn btn-sm {{ $task->completed ? 'btn-warning' : 'btn-success' }}">
+                                            {{ $task->completed ? 'Pendiente' : 'Completar' }}
                                         </button>
                                     </form>
-                                    <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+                                    <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-primary">Editar</a>
                                     <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('¿Eliminar esta tarea?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                        <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
                                     </form>
                                 </div>
                             </td>
