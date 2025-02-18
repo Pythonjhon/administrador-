@@ -12,7 +12,7 @@
         }
         .sidebar {
             width: 250px;
-            background: #218838;
+            background: #212529;
             color: white;
             padding: 20px;
             position: fixed;
@@ -43,7 +43,7 @@
     <div class="sidebar">
         <h4 class="text-center">📌 Panel de Tareas</h4>
         <a href="{{ route('tasks.index') }}">📋 Lista de Tareas</a>
-        <a href="{{ route('tasks.create') }}" class="btn btn-primary w-100 mt-3">+ Nueva Tarea</a>
+        <a href="{{ route('tasks.create') }}" class="btn  w-100 mt-3">+ Nueva Tarea</a>
     </div>
 
     <!-- Contenido Principal -->

@@ -170,7 +170,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="#about">Sobre Nosotros</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#services">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#services">Funcionalidades</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('tasks.index') }}">Administrador</a></li>
                 </ul>
             </div>
