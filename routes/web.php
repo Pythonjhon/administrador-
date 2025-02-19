@@ -18,6 +18,13 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile/edit', [DashboardController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [DashboardController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/delete', [DashboardController::class, 'destroy'])->name('profile.delete');
+});
+
 // Rutas para tareas
 Route::prefix('tasks')->group(function () {
     Route::get('/', [TaskController::class, 'index'])->name('tasks.index');
@@ -27,7 +34,5 @@ Route::prefix('tasks')->group(function () {
     Route::put('/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
     Route::put('/{task}/toggle', [TaskController::class, 'toggle'])->name('tasks.toggle');
-
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 
 });
