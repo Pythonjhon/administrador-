@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            // $table->string('assigned_to');
+            // $table->foreignId('assigned_to')->constrained('users')->onDelete('cascade'); // Relación con usuarios
             $table->boolean('completed')->default(false);
-            $table->string('image')->nullable(); // Campo para la imagen
+            $table->string('image')->nullable(); // Campo para imagen
+            $table->string('archivo')->nullable(); // Nuevo campo para archivos
             $table->timestamps();
         });
     }

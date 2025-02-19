@@ -10,18 +10,19 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(){
-    Schema::table('tasks', function (Blueprint $table) {
-        $table->string('assigned_to')->nullable()->after('description');
-    });
-  }
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->unsignedBigInteger('assigned_to')->nullable()->after('description');
+            $table->foreign('assigned_to')->references('id')->on('users')->onDelete('set null');
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
-    public function down()
-{
-    Schema::table('tasks', function (Blueprint $table) {
-        $table->dropColumn('assigned_to');
-    });
-}
+    public function down(){
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropForeign(['assigned_to']);
+            $table->dropColumn('assigned_to');
+        });
+    }
 };

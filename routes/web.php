@@ -34,5 +34,6 @@ Route::prefix('tasks')->group(function () {
     Route::put('/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
     Route::put('/{task}/toggle', [TaskController::class, 'toggle'])->name('tasks.toggle');
+    Route::get('/tasks/{task}/download', [TaskController::class, 'downloadFile'])->name('tasks.download');
 
 });

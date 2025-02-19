@@ -9,12 +9,10 @@ class Task extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'description',
-        'assigned_to', // Persona asignada a la tarea
-        'completed',
-        'file_path', // Ruta del archivo subido
-        'image', // img
-    ];
+    protected $fillable = ['title', 'description', 'completed', 'image', 'user_id','archivo',];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

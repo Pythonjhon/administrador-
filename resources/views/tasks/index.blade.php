@@ -125,6 +125,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Imagen</th>
+                        <th>Archivo</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
                         <th>Asignado a</th>
@@ -139,7 +140,18 @@
                         <tr>
                             <td>{{ $task->id }}</td>
                             <td>
-                                <img src="{{ asset('storage/' . $task->image) }}" alt="Imagen de la tarea" class="task-image">
+                                @if ($task->image)
+                                    <img src="{{ asset('storage/' . $task->image) }}" alt="Imagen de la tarea" class="task-image">
+                                @else
+                                    <span class="text-muted">Sin imagen</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if ($task->archivo)
+                                    <a href="{{ asset('storage/' . $task->archivo) }}" class="btn btn-sm btn-info" target="_blank">📂 Descargar</a>
+                                @else
+                                    <span class="text-muted">Sin archivo</span>
+                                @endif
                             </td>
                             <td>{{ $task->title }}</td>
                             <td>{{ $task->description }}</td>
@@ -181,4 +193,5 @@
     </div>
 
 </body>
+
 </html>

@@ -58,7 +58,7 @@
             box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
         }
 
-        .image-preview {
+        .file-preview {
             background: #f8f9fa;
             padding: 10px;
             border-radius: 4px;
@@ -127,8 +127,15 @@
 
                 <div class="mb-3">
                     <label for="assigned_to" class="form-label">Asignado a:</label>
-                    <input type="text" name="assigned_to" id="assigned_to" class="form-control" 
-                           value="{{ old('assigned_to', $task->assigned_to) }}" required>
+                    <select name="assigned_to" id="assigned_to" class="form-control">
+                        <option value="">-- No asignado --</option>
+                        @foreach ($users as $user)
+                            <option value="{{ $user->id }}" 
+                                {{ old('assigned_to', $task->assigned_to) == $user->id ? 'selected' : '' }}>
+                                {{ $user->name }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="mb-3">
@@ -143,12 +150,23 @@
                     <label for="image" class="form-label">Imagen:</label>
                     <input type="file" name="image" id="image" class="form-control">
                     @if($task->image)
-                        <div class="image-preview">
+                        <div class="file-preview mt-2">
                             <p class="mb-2">Imagen actual:</p>
                             <img src="{{ asset('storage/' . $task->image) }}" 
                                  alt="Imagen de la tarea" width="150">
                         </div>
                     @endif
+                </div>
+
+                <div class="mb-3">
+                    <label for="archivo" class="form-label">Subir Archivo:</label>
+                    <input type="file" name="archivo" id="archivo" class="form-control">
+                    @if($task->archivo)
+                        <div class="mt-2">
+                            <p class="mb-2">Archivo actual: <a href="{{ asset('storage/' . $task->archivo) }}" target="_blank">Ver archivo</a></p>
+                        </div>
+                    @endif
+                    
                 </div>
 
                 <div class="d-flex gap-2">

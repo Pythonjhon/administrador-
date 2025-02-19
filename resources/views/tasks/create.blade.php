@@ -51,7 +51,14 @@
 
             <div class="mb-3">
                 <label for="assigned_to" class="form-label">👤 Asignado a:</label>
-                <input type="text" name="assigned_to" id="assigned_to" class="form-control" required value="{{ old('assigned_to') }}">
+                <select name="assigned_to" id="assigned_to" class="form-select" required>
+                    <option value="">-- Seleccionar usuario --</option>
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}" {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
+                            {{ $user->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="mb-3">
@@ -65,6 +72,11 @@
             <div class="mb-3">
                 <label for="image" class="form-label">🖼️ Imagen:</label>
                 <input type="file" name="image" id="image" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="archivo" class="form-label">📂 Archivo adjunto:</label>
+                <input type="file" name="archivo" id="archivo" class="form-control">
             </div>
 
             <div class="d-flex justify-content-between">
