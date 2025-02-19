@@ -18,6 +18,8 @@
             padding: 20px;
             position: fixed;
             height: 100%;
+            display: flex;
+            flex-direction: column;
         }
         .sidebar a {
             color: white;
@@ -30,19 +32,40 @@
             transition: background-color 0.3s ease;
         }
         .sidebar a:hover, .sidebar .active {
-            background: #198754;
+            background: #2e7d32;
         }
         .home-link {
-            background: #212529 !important;
-            margin-top: auto !important;
+            background: #212529;
         }
         .home-link:hover {
-            background: #198754 !important;
+            background: #2e7d32;
         }
         .sidebar-content {
-            display: flex;
-            flex-direction: column;
-            height: calc(100% - 40px);
+            flex-grow: 1;
+        }
+        .user-info {
+            text-align: center;
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 15px;
+        }
+        .user-info h5 {
+            margin-bottom: 5px;
+        }
+        .logout-btn {
+            background: #2e7d32;
+            color: white;
+            text-align: center;
+            display: block;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+        .logout-btn:hover {
+            background: #2e7d32;
         }
         .content {
             margin-left: 270px;
@@ -55,22 +78,41 @@
             object-fit: cover;
             border-radius: 5px;
         }
+        .text-muted {
+            color: white
+        }
+        .sidebar a, .sidebar p {
+          color: white !important;
+        }
+
     </style>
 </head>
 <body>
 
     <!-- Sidebar -->
     <div class="sidebar">
+        <div class="user-info">
+            <h5>{{ Auth::user()->name }}</h5>
+            <p class="text-muted">{{ Auth::user()->email }}</p>
+        </div>
+
         <div class="sidebar-content">
             <h4 class="text-center mb-3">📌 Panel de Tareas</h4>
             <a href="{{ route('tasks.index') }}" class="{{ !$filter ? 'active' : '' }}">📋 Todas las Tareas</a>
             <a href="{{ route('tasks.index', ['filter' => 'completed']) }}" class="{{ $filter === 'completed' ? 'active' : '' }}">✅ Completadas</a>
             <a href="{{ route('tasks.index', ['filter' => 'pending']) }}" class="{{ $filter === 'pending' ? 'active' : '' }}">⏳ Pendientes</a>
+            <a href="{{ route('dashboard') }}" class="btn btn-success w-100 mt-3">Perfil</a>
             <a href="{{ route('tasks.create') }}" class="btn btn-success w-100 mt-3">+ Nueva Tarea</a>
-            
-            <!-- Enlace a página principal -->
-            <a href="{{ route('welcome') }}" class="home-link mt-auto">🏠 Volver a Inicio</a>
         </div>
+
+        <!-- Botón de cierre de sesión -->
+        <form action="{{ route('logout') }}" method="POST" class="mt-auto">
+            @csrf
+            <button type="submit" class="logout-btn">🚪 Cerrar Sesión</button>
+        </form>
+
+        <!-- Enlace a página principal -->
+        <a href="{{ route('welcome') }}" class="home-link">🏠 Volver a Inicio</a>
     </div>
 
     <!-- Contenido Principal -->
