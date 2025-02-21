@@ -1,16 +1,38 @@
+<!--
+Archivo: editar_tarea.html
+Descripción: Este archivo representa una vista en HTML para editar una tarea dentro de una aplicación web.
+Tecnologías utilizadas: HTML, CSS, Bootstrap 5, Blade (Laravel)
+
+Estructura del documento:
+1. Configuración inicial y estilos
+2. Barra lateral de navegación
+3. Contenido principal con formulario de edición de tarea
+-->
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!--
+    Configuración del documento HTML:
+    - Establece la codificación en UTF-8.
+    - Configura la vista para que sea responsive.
+    - Incluye Bootstrap 5 para estilos y diseño responsivo.
+    -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Tarea</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
+        /*
+        Estilos generales del documento
+        - Se configura el body para usar flexbox y ocupar el 100% de la pantalla.
+        */
         body {
             display: flex;
             height: 100vh;
         }
 
+        /* Estilos para la barra lateral */
         .sidebar {
             width: 250px;
             background: #212529;
@@ -20,6 +42,7 @@
             height: 100%;
         }
 
+        /* Estilos para los enlaces de la barra lateral */
         .sidebar a {
             color: white;
             text-decoration: none;
@@ -33,6 +56,7 @@
             background: #2e7d32;
         }
 
+        /* Contenido principal */
         .content {
             margin-left: 270px;
             flex-grow: 1;
@@ -40,64 +64,28 @@
             width: 100%;
         }
 
+        /* Contenedor del formulario */
         .form-container {
             background: white;
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
-
-        .form-control {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .form-control:focus {
-            border-color: #2e7d32;
-            box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
-        }
-
-        .file-preview {
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 8px;
-        }
-
-        .btn-success {
-            background-color: #2e7d32;
-            border: none;
-        }
-
-        .btn-success:hover {
-            background-color: #2e7d32;
-        }
-
-        .alert-danger {
-            border-radius: 4px;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-        }
-
-        .form-label {
-            margin-bottom: 5px;
-            font-weight: normal;
-        }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
+    <!-- Barra lateral de navegación -->
     <div class="sidebar">
         <h4 class="text-center">📌 Panel de Tareas</h4>
         <a href="{{ route('tasks.index') }}">📋 Lista de Tareas</a>
         <a href="{{ route('tasks.create') }}" class="btn w-100 mt-3">+ Nueva Tarea</a>
     </div>
 
-    <!-- Contenido Principal -->
+    <!-- Contenido principal -->
     <div class="content">
         <h2 class="mb-3">✏️ Editar Tarea</h2>
 
+        <!-- Sección para mostrar errores de validación -->
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul class="mb-0">
@@ -109,22 +97,26 @@
         @endif
 
         <div class="form-container">
+            <!-- Formulario de edición de tarea -->
             <form action="{{ route('tasks.update', $task->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
+                <!-- Campo para el título -->
                 <div class="mb-3">
                     <label for="title" class="form-label">Título:</label>
                     <input type="text" name="title" id="title" class="form-control" 
                            value="{{ old('title', $task->title) }}" required>
                 </div>
 
+                <!-- Campo para la descripción -->
                 <div class="mb-3">
                     <label for="description" class="form-label">Descripción:</label>
                     <textarea name="description" id="description" class="form-control" 
                             rows="3">{{ old('description', $task->description) }}</textarea>
                 </div>
 
+                <!-- Selector de usuario asignado -->
                 <div class="mb-3">
                     <label for="assigned_to" class="form-label">Asignado a:</label>
                     <select name="assigned_to" id="assigned_to" class="form-control">
@@ -138,6 +130,7 @@
                     </select>
                 </div>
 
+                <!-- Selector de estado de la tarea -->
                 <div class="mb-3">
                     <label for="completed" class="form-label">Estado:</label>
                     <select name="completed" id="completed" class="form-control">
@@ -146,6 +139,7 @@
                     </select>
                 </div>
 
+                <!-- Subir imagen -->
                 <div class="mb-3">
                     <label for="image" class="form-label">Imagen:</label>
                     <input type="file" name="image" id="image" class="form-control">
@@ -158,17 +152,13 @@
                     @endif
                 </div>
 
+                <!-- Subir archivo -->
                 <div class="mb-3">
                     <label for="archivo" class="form-label">Subir Archivo:</label>
                     <input type="file" name="archivo" id="archivo" class="form-control">
-                    @if($task->archivo)
-                        <div class="mt-2">
-                            <p class="mb-2">Archivo actual: <a href="{{ asset('storage/' . $task->archivo) }}" target="_blank">Ver archivo</a></p>
-                        </div>
-                    @endif
-                    
                 </div>
 
+                <!-- Botones de acción -->
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-success">💾 Guardar Cambios</button>
                     <a href="{{ route('tasks.index') }}" class="btn btn-secondary">🔙 Volver</a>
