@@ -174,10 +174,20 @@
                     {{-- <li class="nav-item"><a class="nav-link" href="{{ route('tasks.index') }}">Administrador</a></li> --}}
                     <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Iniciar Sesión</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Registrarse</a></li>
+                    <!-- Rutas para el administrador (ocultas por defecto) -->
+                    <li class="nav-item admin-link" style="display: none;"><a class="nav-link" href="{{ route('admin.login') }}">Admin Login</a></li>
+                    <li class="nav-item admin-link" style="display: none;"><a class="nav-link" href="{{ route('admin.register') }}">Admin Registro</a></li>
                 </ul>
+                <!-- Botón con icono para activar modo admin -->
+                <div class="ms-2">
+                    <button id="adminAccessBtn" class="btn btn-sm" style="background: none; border: none; color: #ccc; opacity: 0.5; padding: 0 8px;" title="Acceso Admin">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
+
 
     <header class="hero">
         <div class="container">
@@ -245,3 +255,31 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Código secreto para mostrar los enlaces de administrador
+        const secretCode = '1234';
+        
+        // Agregar evento al botón de acceso admin
+        document.getElementById('adminAccessBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Solicitar código
+            const userInput = prompt('Ingrese el código de acceso:');
+            
+            // Verificar si coincide con el código secreto
+            if (userInput === secretCode) {
+                // Mostrar enlaces de administrador
+                document.querySelectorAll('.admin-link').forEach(function(link) {
+                    link.style.display = 'block';
+                });
+                
+                // Cambiar estilo del botón para indicar que está activado
+                this.style.color = '#007bff';
+                this.style.opacity = '1';
+            }
+        });
+    });
+</script>

@@ -47,4 +47,9 @@ class User extends Authenticatable
             'password' => 'hashed', // Aplica hashing al atributo password
         ];
     }
+    public function isAdmin()
+{
+    return $this->role === 'admin';
+}
+
 }

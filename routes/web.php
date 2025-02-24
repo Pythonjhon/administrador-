@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AuthAdminController;
+
+
 
 /**
  * Rutas principales de la aplicación.
@@ -107,4 +110,26 @@ Route::prefix('tasks')->group(function () {
      * @param int $task ID de la tarea con el archivo a descargar.
      */
     Route::get('/{task}/download', [TaskController::class, 'downloadFile'])->name('tasks.download');
+});
+
+use App\Http\Controllers\AdminDashboardController;
+/**
+ * Rutas de autenticación para administradores
+ */
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('login', [AuthAdminController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AuthAdminController::class, 'login'])->name('login.submit');
+    Route::post('logout', [AuthAdminController::class, 'logout'])->name('logout');
+
+    // Registro de administradores
+    Route::get('register', [AuthAdminController::class, 'showRegisterForm'])->name('register');
+    Route::post('register', [AuthAdminController::class, 'register'])->name('register.submit');
+
+    // Rutas protegidas para administradores
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('edit', [AdminDashboardController::class, 'edit'])->name('edit');
+        Route::put('update', [AdminDashboardController::class, 'update'])->name('update');
+        Route::delete('delete', [AdminDashboardController::class, 'destroy'])->name('destroy');
+    });
 });
