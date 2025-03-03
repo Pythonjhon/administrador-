@@ -6,51 +6,42 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Admin;
+use Illuminate\Support\Facades\Redirect;
 
 class AuthAdminController extends Controller
 {
     /**
      * Muestra el formulario de registro de administradores.
-     *
-     * @return \Illuminate\View\View
      */
     public function showRegisterForm()
     {
-        return view('admin.register'); // Asegúrate de que esta vista exista en resources/views/admin/register.blade.php
+        return view('admin.register');
     }
 
     /**
      * Procesa el registro de un nuevo administrador.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function register(Request $request)
     {
-        // Validar los datos del formulario
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:admins,email',
             'password' => 'required|min:6|confirmed',
         ]);
 
-        // Crear un nuevo administrador
         $admin = Admin::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password), // Encripta la contraseña
+            'password' => Hash::make($request->password),
         ]);
 
-        // Autenticar al nuevo administrador
         Auth::guard('admin')->login($admin);
 
         return redirect()->route('admin.dashboard')->with('success', 'Registro exitoso.');
     }
 
     /**
-     * Muestra el formulario de inicio de sesión para administradores.
-     *
-     * @return \Illuminate\View\View
+     * Muestra el formulario de inicio de sesión.
      */
     public function showLoginForm()
     {
@@ -58,10 +49,7 @@ class AuthAdminController extends Controller
     }
 
     /**
-     * Procesa el inicio de sesión del administrador.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * Procesa el inicio de sesión.
      */
     public function login(Request $request)
     {
@@ -79,12 +67,58 @@ class AuthAdminController extends Controller
 
     /**
      * Cierra la sesión del administrador.
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function logout()
     {
         Auth::guard('admin')->logout();
         return redirect()->route('admin.login')->with('success', 'Sesión cerrada correctamente.');
     }
+
+    /**
+     * Muestra el formulario de edición del perfil.
+     */
+    public function editProfile()
+    {
+        if (!Auth::guard('admin')->check()) {
+            return redirect()->route('admin.login')->with('error', 'Debes iniciar sesión.');
+        }
+
+        $admin = Auth::guard('admin')->user();
+        return view('admin.profile', compact('admin'));
+    }
+
+    /**
+     * Actualiza los datos del perfil del administrador.
+     */
+    public function update(Request $request)
+    {
+        if (!Auth::guard('admin')->check()) {
+            return redirect()->route('admin.login')->with('error', 'Debes iniciar sesión.');
+        }
+    
+        $admin = Auth::guard('admin')->user();
+    
+        if (!$admin) {
+            return redirect()->route('admin.login')->with('error', 'No se encontró el administrador.');
+        }
+    
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:admins,email,' . $admin->id,
+            'password' => 'nullable|min:6|confirmed',
+        ]);
+    
+        // Actualizar los datos usando update() en lugar de save()
+        $admin = Auth::guard('admin')->user();
+
+        if (!$admin) {
+            return redirect()->route('admin.login')->with('error', 'No se encontró el administrador.');
+        }
+        
+        dd($admin); // Verifica que el objeto tiene datos
+        
+    
+        return redirect()->route('admin.dashboard')->with('success', 'Perfil actualizado correctamente.');
+    }
+    
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Admin;
+use Illuminate\Support\Facades\Redirect;
 
 /**
  * Controlador del Panel de Administrador (Dashboard).
@@ -17,9 +18,15 @@ class AdminDashboardController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+
+     public function index()
     {
-        $admin = Auth::user();
+        // Verifica si hay un administrador autenticado
+        if (!Auth::guard('admin')->check()) {
+            return redirect()->route('admin.login')->with('error', 'Debes iniciar sesión.');
+        }
+
+        $admin = Auth::guard('admin')->user();
         return view('admin.dashboard', compact('admin'));
     }
 
@@ -30,7 +37,11 @@ class AdminDashboardController extends Controller
      */
     public function edit()
     {
-        $admin = Auth::user();
+        if (!Auth::guard('admin')->check()) {
+            return redirect()->route('admin.login')->with('error', 'Debes iniciar sesión.');
+        }
+
+        $admin = Auth::guard('admin')->user();
         return view('admin.edit-profile', compact('admin'));
     }
 
@@ -42,34 +53,27 @@ class AdminDashboardController extends Controller
      */
     public function update(Request $request)
     {
-        // Obtener el administrador autenticado
-        $admin = Admin::find(Auth::id());
-
-        // Verificar si el administrador existe
-        if (!$admin) {
-            return redirect()->route('admin.dashboard')->with('error', 'Administrador no encontrado.');
+        if (!Auth::guard('admin')->check()) {
+            return redirect()->route('admin.login')->with('error', 'Debes iniciar sesión.');
         }
 
-        // Validar los datos ingresados
+        $admin = Auth::guard('admin')->user();
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:admins,email,' . $admin->id,
             'password' => 'nullable|min:6|confirmed',
         ]);
 
-        // Actualizar los datos del administrador
         $admin->name = $request->name;
         $admin->email = $request->email;
 
-        // Actualizar la contraseña solo si se proporciona una nueva
         if ($request->filled('password')) {
             $admin->password = bcrypt($request->password);
         }
 
-        // Guardar los cambios en la base de datos
         $admin->save();
 
-        // Redirigir al dashboard con un mensaje de éxito
         return redirect()->route('admin.dashboard')->with('success', 'Perfil actualizado correctamente.');
     }
 

@@ -1,29 +1,30 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class Admin extends Authenticatable
 {
     use HasFactory, Notifiable;
 
     /**
-     * Definir el guard de autenticación para administradores.
-     *
-     * @var string
+     * Especifica el guard de autenticación para este modelo.
      */
     protected $guard = 'admin';
 
     /**
+     * Define la tabla asociada al modelo.
+     */
+    protected $table = 'admins';
+
+    /**
      * Atributos asignables masivamente.
-     *
-     * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
         'name',
         'email',
         'password',
@@ -31,8 +32,6 @@ class Admin extends Authenticatable
 
     /**
      * Atributos ocultos en serialización.
-     *
-     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -41,17 +40,13 @@ class Admin extends Authenticatable
 
     /**
      * Casteo de atributos.
-     *
-     * @var array<string, string>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
 
     /**
      * Relación con el modelo User.
-     * Un administrador está vinculado a un usuario.
      */
     public function user()
     {
@@ -64,5 +59,15 @@ class Admin extends Authenticatable
     public function isAdmin(): bool
     {
         return true;
+    }
+
+    /**
+     * Mutador para hashear la contraseña automáticamente.
+     */
+    public function setPasswordAttribute($value)
+    {
+        if (!empty($value)) {
+            $this->attributes['password'] = Hash::make($value);
+        }
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthAdminController;
+use App\Http\Controllers\UserManagementController;
 
 
 
@@ -133,3 +134,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('delete', [AdminDashboardController::class, 'destroy'])->name('destroy');
     });
 });
+
+Route::get('/users', [UserManagementController::class, 'index'])->name('users.index');
+Route::get('/users/{id}/edit', [UserManagementController::class, 'edit'])->name('users.edit');
+Route::put('/users/{id}', [UserManagementController::class, 'update'])->name('users.update');
+Route::delete('/users/{id}', [UserManagementController::class, 'destroy'])->name('users.delete');
+// Rutas para asignación de tareas
+Route::get('/users/{id}/assign-task', [UserManagementController::class, 'assignTaskForm'])->name('users.assign-task');
+Route::post('/users/{id}/assign-task', [UserManagementController::class, 'assignTask'])->name('users.assign-task.store');

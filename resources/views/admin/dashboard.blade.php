@@ -108,7 +108,7 @@
         </div>
         <a href="#">📄 Datos Personales</a>
         <a href="{{ route('admin.edit') }}">✏️ Editar Perfil</a>
-        <a href="{{ route('tasks.index') }}" class="btn btn-secondary">Administrador</a>
+        <a href="{{ route('users.index') }}" class="btn btn-secondary">Administrador</a>
     </div>
 
     <div class="content">
