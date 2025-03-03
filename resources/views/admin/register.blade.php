@@ -146,6 +146,12 @@
         <div class="footer">
             Panel de Administración - Nuevo Talento Humano
         </div>
+        <p style="text-align: center; margin-top: 15px;">
+            ¿Ya tienes cuenta? 
+            <a href="{{ route('admin.login') }}" style="color: #2e7d32; font-weight: bold; text-decoration: none;">
+                Inicia sesión aquí
+            </a>
+        </p>
     </div>
 </body>
 </html>

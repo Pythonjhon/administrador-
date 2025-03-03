@@ -136,6 +136,15 @@
         <div class="footer">
             Panel de Administración - Nuevo Talento Humano
         </div>
+        <!-- Enlace para registrarse -->
+        <p style="text-align: center; margin-top: 15px;">
+            ¿No tienes cuenta? 
+            <a href="{{ route('admin.register') }}" style="color: #2e7d32; font-weight: bold; text-decoration: none;">
+                Regístrate aquí
+            </a>
+        </p>
+        
     </div>
+    
 </body>
 </html>
