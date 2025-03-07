@@ -12,10 +12,10 @@ class UserManagementController extends Controller
      * Muestra la lista de usuarios.
      */
     public function index()
-    {
-        $users = User::all();
-        return view('users.index', compact('users'));
-    }
+{
+    $users = User::with('tasks')->get();
+    return view('users.index', compact('users'));
+}
 
     /**
      * Muestra el formulario de edición de un usuario.

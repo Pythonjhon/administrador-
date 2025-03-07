@@ -39,6 +39,11 @@
             flex-grow: 1;
             padding: 30px;
         }
+        .task-image {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -56,6 +61,9 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Email</th>
+                        <th>Última Tarea</th>
+                        <th>Imagen</th>
+                        <th>Archivo</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -64,6 +72,29 @@
                     <tr>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
+                        <td>
+                            @if($user->tasks->isNotEmpty())
+                                {{ $user->tasks->last()->title }}
+                            @else
+                                <span class="text-muted">Sin tareas</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($user->tasks->isNotEmpty() && $user->tasks->last()->image)
+                                <img src="{{ asset('storage/' . $user->tasks->last()->image) }}" alt="Imagen de tarea" class="task-image">
+                            @else
+                                <span class="text-muted">Sin imagen</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($user->tasks->isNotEmpty() && $user->tasks->last()->archivo)
+                                <a href="{{ asset('storage/' . $user->tasks->last()->archivo) }}" class="btn btn-sm btn-info" target="_blank">
+                                    📂 Ver archivo
+                                </a>
+                            @else
+                                <span class="text-muted">Sin archivo</span>
+                            @endif
+                        </td>
                         <td>
                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary">✏️ Editar</a>
                             <form action="{{ route('users.delete', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar este usuario?');">

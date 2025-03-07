@@ -162,23 +162,21 @@
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">Nuevo Talento Humano</a>
+            <a class="navbar-brand fw-bold" href="#">Gestión de Tareas</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#about">Sobre Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">Sobre el Proyecto</a></li>
                     <li class="nav-item"><a class="nav-link" href="#services">Funcionalidades</a></li>
-                    {{-- <li class="nav-item"><a class="nav-link" href="{{ route('tasks.index') }}">Administrador</a></li> --}}
+                    {{-- <li class="nav-item"><a class="nav-link" href="{{ route('tasks.index') }}">Gestión de Tareas</a></li> --}}
                     <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Iniciar Sesión</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Registrarse</a></li>
-                    <!-- Rutas para el administrador (ocultas por defecto) -->
                     <li class="nav-item admin-link" style="display: none;"><a class="nav-link" href="{{ route('admin.login') }}">Admin Login</a></li>
                     <li class="nav-item admin-link" style="display: none;"><a class="nav-link" href="{{ route('admin.register') }}">Admin Registro</a></li>
                 </ul>
-                <!-- Botón con icono para activar modo admin -->
                 <div class="ms-2">
                     <button id="adminAccessBtn" class="btn btn-sm" style="background: none; border: none; color: #ccc; opacity: 0.5; padding: 0 8px;" title="Acceso Admin">
                         <i class="fas fa-cog"></i>
@@ -188,13 +186,12 @@
         </div>
     </nav>
 
-
     <header class="hero">
         <div class="container">
-            <h1 class="fw-bold">Corporación Nuevo Talento Humano</h1>
+            <h1 class="fw-bold">Gestión de Tareas para la Corporación</h1>
             <div class="hero-image-container">
                 <img src="/img/corporacion.jpg" 
-                     alt="Imagen de portada de Nuevo Talento Humano" 
+                     alt="Imagen de gestión de tareas" 
                      loading="lazy"
                      class="shadow">
             </div>
@@ -204,12 +201,22 @@
     <main>
         <section id="about" class="section">
             <div class="container">
-                <h2 class="text-center mb-4 fw-bold">Sobre Nosotros</h2>
+                <h2 class="text-center mb-4 fw-bold">Sobre el Proyecto</h2>
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         <p class="text-center lead">
-                            Somos una corporación dedicada al desarrollo y formación del talento humano, 
-                            comprometidos con el crecimiento profesional y personal de nuestra comunidad.
+                            Este sistema ha sido diseñado para mejorar la organización y eficiencia en la gestión de tareas dentro de la corporación. 
+                            A través de esta plataforma, los colaboradores podrán asignar, monitorear y completar tareas de manera estructurada, 
+                            asegurando que todos los procesos se lleven a cabo de manera ordenada y efectiva.
+                        </p>
+                        <p class="text-center lead">
+                            Con una interfaz intuitiva y accesible, el sistema permite a los usuarios visualizar sus responsabilidades, establecer fechas 
+                            límite y colaborar con otros miembros del equipo. Además, el administrador podrá supervisar el progreso de cada tarea y 
+                            generar reportes detallados sobre el desempeño de la organización.
+                        </p>
+                        <p class="text-center lead">
+                            La gestión eficiente de tareas es clave para optimizar los recursos de la corporación y garantizar que cada proyecto se desarrolle 
+                            sin contratiempos. Este sistema busca facilitar el trabajo en equipo y promover la productividad en todas las áreas.
                         </p>
                     </div>
                 </div>
@@ -218,27 +225,27 @@
 
         <section id="services" class="section services">
             <div class="container">
-                <h2 class="text-center mb-5 fw-bold">Nuestros Servicios</h2>
+                <h2 class="text-center mb-5 fw-bold">Funcionalidades</h2>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card text-center p-4">
-                            <div class="icon">🎓</div>
-                            <h4 class="fw-bold mb-3">Formación Profesional</h4>
-                            <p class="mb-0">Programas de capacitación y desarrollo de habilidades para potenciar tu carrera.</p>
+                            <div class="icon">📝</div>
+                            <h4 class="fw-bold mb-3">Gestión de Tareas</h4>
+                            <p class="mb-0">Creación, asignación y seguimiento de tareas dentro de la corporación.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card text-center p-4">
-                            <div class="icon">💼</div>
-                            <h4 class="fw-bold mb-3">Desarrollo Laboral</h4>
-                            <p class="mb-0">Orientación y vinculación laboral para impulsar tu crecimiento profesional.</p>
+                            <div class="icon">📅</div>
+                            <h4 class="fw-bold mb-3">Calendario de Actividades</h4>
+                            <p class="mb-0">Organización y planificación de actividades con fechas clave.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card text-center p-4">
-                            <div class="icon">🤝</div>
-                            <h4 class="fw-bold mb-3">Asesoría</h4>
-                            <p class="mb-0">Acompañamiento personalizado para alcanzar tus metas profesionales.</p>
+                            <div class="icon">📊</div>
+                            <h4 class="fw-bold mb-3">Reportes</h4>
+                            <p class="mb-0">Generación de informes sobre el estado y progreso de las tareas.</p>
                         </div>
                     </div>
                 </div>
@@ -248,12 +255,13 @@
 
     <footer class="footer">
         <div class="container">
-            <p class="m-0">&copy; 2025 Corporación Nuevo Talento Humano. Todos los derechos reservados.</p>
+            <p class="m-0">&copy; 2025 Sistema de Gestión de Tareas. Todos los derechos reservados.</p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
