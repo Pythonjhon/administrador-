@@ -127,43 +127,76 @@
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        <!-- Formulario para actualizar datos del usuario -->
-        <div class="form-container">
-            <form action="{{ route('profile.update') }}" method="POST">
-                @csrf
+       <!-- Formulario para actualizar datos del usuario -->
+<div class="form-container">
+    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
 
-                <!-- Campo para el nombre -->
-                <div class="mb-3">
-                    <label class="form-label">Nombre:</label>
-                    <input type="text" name="name" class="form-control" value="{{ $user->name }}" required>
-                </div>
-
-                <!-- Campo para el correo -->
-                <div class="mb-3">
-                    <label class="form-label">Email:</label>
-                    <input type="email" name="email" class="form-control" value="{{ $user->email }}" required>
-                </div>
-
-                <!-- Campo para la nueva contraseña -->
-                <div class="mb-3">
-                    <label class="form-label">Nueva Contraseña (opcional):</label>
-                    <input type="password" name="password" class="form-control">
-                </div>
-
-                <!-- Campo para confirmar la nueva contraseña -->
-                <div class="mb-3">
-                    <label class="form-label">Confirmar Contraseña:</label>
-                    <input type="password" name="password_confirmation" class="form-control">
-                </div>
-
-                <!-- Botón para actualizar el perfil -->
-                <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
-                
-                <!-- Botón para cancelar y volver al perfil -->
-                <a href="{{ route('dashboard') }}" class="btn btn-secondary">Cancelar</a>
-            </form>
+        <!-- Campo para el nombre -->
+        <div class="mb-3">
+            <label class="form-label">Nombre:</label>
+            <input type="text" name="name" class="form-control" value="{{ $user->name }}" required>
         </div>
+
+        <!-- Campo para el correo -->
+        <div class="mb-3">
+            <label class="form-label">Email:</label>
+            <input type="email" name="email" class="form-control" value="{{ $user->email }}" required>
+        </div>
+
+        <!-- Campo para el teléfono -->
+        <div class="mb-3">
+            <label class="form-label">Teléfono:</label>
+            <input type="text" name="phone" class="form-control" value="{{ $user->phone }}">
+        </div>
+
+        <!-- Campo para la dirección -->
+        <div class="mb-3">
+            <label class="form-label">Dirección:</label>
+            <input type="text" name="address" class="form-control" value="{{ $user->address }}">
+        </div>
+
+        <!-- Campo para el rol en la fundación -->
+        <div class="mb-3">
+            <label class="form-label">Rol en la fundación:</label>
+            <input type="text" name="job" class="form-control" value="{{ $user->job }}">
+        </div>
+
+        <!-- Campo para la imagen de perfil -->
+        <div class="mb-3">
+            <label class="form-label">Imagen de Perfil:</label>
+            <input type="file" name="image" class="form-control">
+            
+            @if ($user->image)
+                <div class="mt-2">
+                    <img src="{{ asset('storage/' . $user->image) }}" alt="Imagen de perfil" width="100">
+                </div>
+            @endif
+        </div>
+
+        <!-- Campo para la nueva contraseña -->
+        <div class="mb-3">
+            <label class="form-label">Nueva Contraseña (opcional):</label>
+            <input type="password" name="password" class="form-control">
+        </div>
+
+        <!-- Campo para confirmar la nueva contraseña -->
+        <div class="mb-3">
+            <label class="form-label">Confirmar Contraseña:</label>
+            <input type="password" name="password_confirmation" class="form-control">
+        </div>
+
+        <!-- Botón para actualizar el perfil -->
+        <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
+        
+        <!-- Botón para cancelar y volver al perfil -->
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Cancelar</a>
+
+    </form>
+</div>
+
     </div>
 
 </body>
+
 </html>

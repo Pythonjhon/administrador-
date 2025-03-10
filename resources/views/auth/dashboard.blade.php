@@ -7,7 +7,7 @@
     <!-- Enlace a Bootstrap 5 para estilos -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
-        /* Estilos generales del cuerpo */
+        /* Estilos generales */
         body {
             display: flex;
             min-height: 100vh;
@@ -26,21 +26,23 @@
             flex-direction: column;
         }
 
-        /* Enlaces de la barra lateral */
-        .sidebar a {
-            color: white !important;
-            text-decoration: none;
-            display: block;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 5px;
-            font-weight: 500;
-            transition: background-color 0.3s ease;
+        /* Imagen de perfil en la barra lateral */
+        .profile-sidebar-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
         }
 
-        /* Estilo cuando se pasa el cursor o está activo */
-        .sidebar a:hover, .sidebar .active {
-            background: #2e7d32;
+        .profile-sidebar-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         /* Información del usuario en la barra lateral */
@@ -55,10 +57,38 @@
             margin-bottom: 5px;
         }
 
+        /* Enlaces de la barra lateral */
+        .sidebar a {
+            color: white !important;
+            text-decoration: none;
+            display: block;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar a:hover, .sidebar .active {
+            background: #2e7d32;
+        }
+
+        .home-link {
+            background: #212529;
+        }
+
+        .home-link:hover {
+            background: #2e7d32;
+        }
+
+        .sidebar-content {
+            flex-grow: 1;
+        }
+        
         /* Botón de cierre de sesión */
         .logout-btn {
             background: #2e7d32;
-            color: white;
+            color: white !important;
             text-align: center;
             display: block;
             padding: 12px;
@@ -67,21 +97,22 @@
             font-weight: 500;
             text-decoration: none;
             transition: background 0.3s ease;
+            border: none;
+            width: 100%;
         }
 
-        /* Estilo al pasar el cursor sobre el botón de cierre de sesión */
         .logout-btn:hover {
             background: #19692c;
         }
 
-        /* Contenedor principal de la página */
+        /* Contenido principal */
         .content {
             margin-left: 270px;
             flex-grow: 1;
             padding: 30px;
         }
 
-        /* Contenedor del perfil de usuario */
+        /* Contenedor del perfil */
         .profile-container {
             background: white;
             padding: 20px;
@@ -90,30 +121,28 @@
             display: flex;
             align-items: center;
             gap: 20px;
+            margin-bottom: 20px;
         }
 
         /* Estilo de la foto de perfil */
         .profile-pic {
-            width: 80px;
-            height: 80px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
+            overflow: hidden;
             background: #ddd;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
-            color: #218838;
         }
 
-        /* Estilo de imágenes en las tareas */
-        .task-image {
-            width: 80px;
-            height: 80px;
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            border-radius: 5px;
         }
 
-        /* Botones generales */
+        /* Botones */
         .btn {
             background: #2e7d32;
             color: white;
@@ -121,29 +150,42 @@
             padding: 10px 15px;
             border-radius: 5px;
             font-weight: 500;
-            display: inline-block;
-            margin-top: 10px;
             transition: background 0.3s ease;
+            display: inline-block;
+            text-align: center;
         }
 
-        /* Estilo al pasar el cursor sobre los botones */
         .btn:hover {
             background: #19692c;
         }
 
-        /* Estilo del botón de eliminar cuenta */
+        /* Botón de eliminar cuenta */
         .delete-btn {
             background: red;
+            margin-top: 10px;
         }
 
-        /* Estilo al pasar el cursor sobre el botón de eliminar */
         .delete-btn:hover {
             background: darkred;
         }
 
         /* Color de los textos en la barra lateral */
         .sidebar a, .sidebar p {
-          color: white !important;
+            color: white !important;
+        }
+
+        /* Estilo para imágenes de tareas */
+        .task-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        /* Estilo para textos con opacidad */
+        .text-muted {
+            color: white !important;
+            opacity: 0.7;
         }
     </style>
 </head>
@@ -152,35 +194,44 @@
     <!-- Barra lateral -->
     <div class="sidebar">
         <div class="user-info">
-            <!-- Nombre y correo del usuario obtenido desde Blade -->
             <h5>👤 {{ $user->name }}</h5>
             <p class="text-muted">{{ $user->email }}</p>
         </div>
-        <!-- Enlaces de la barra lateral -->
-        <a href="#">📄 Datos Personales</a>
-        <a href="{{ route('profile.edit') }}">✏️ Editar Perfil</a>
-        <a href="{{ route('tasks.index') }}" class="btn btn-secondary">Administrador</a>
+        <div class="sidebar-content">
+            <a href="#" class="active">📄 Datos Personales</a>
+            <a href="{{ route('profile.edit') }}">✏️ Editar Perfil</a>
+            <a href="{{ route('tasks.index') }}">🔧 Administrador</a>
+            <a href="/" class="home-link">🏠 Inicio</a>
+        </div>
+        <!-- Botón de cierre de sesión -->
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="logout-btn">🚪 Cerrar Sesión</button>
+        </form>
     </div>
-
+    
     <!-- Contenido Principal -->
     <div class="content">
         <h2>Perfil de Usuario</h2>
 
         <!-- Contenedor de perfil -->
         <div class="profile-container">
-            <!-- Icono de foto de perfil -->
-            <div class="profile-pic">📷</div>
+            <!-- Foto de perfil en la sección principal -->
+            <div class="profile-pic">
+                @if ($user->image)
+                    <img src="{{ asset('storage/' . $user->image) }}" alt="Foto de perfil">
+                @else
+                    📷
+                @endif
+            </div>
 
             <div>
-                <!-- Datos del usuario -->
                 <p><strong>Nombre:</strong> {{ $user->name }}</p>
                 <p><strong>Email:</strong> {{ $user->email }}</p>
-
-                <!-- Botón de cierre de sesión -->
-                <form action="{{ route('logout') }}" method="POST" class="mt-auto">
-                    @csrf
-                    <button type="submit" class="logout-btn">🚪 Cerrar Sesión</button>
-                </form>
+                <p><strong>Teléfono:</strong> {{ $user->phone ?? 'No registrado' }}</p>
+                <p><strong>Dirección:</strong> {{ $user->address ?? 'No registrada' }}</p>
+                <p><strong>Trabajo:</strong> {{ $user->job ?? 'No especificado' }}</p>
+                <p><strong>Contacto Alternativo:</strong> {{ $user->contact_number ?? 'No disponible' }}</p>
             </div>
         </div>
 
@@ -189,7 +240,7 @@
               onsubmit="return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');">
             @csrf
             @method('DELETE')
-            <button type="submit" class="btn delete-btn">❌ Eliminar Cuenta</button>
+            <button type="submit" class="btn btn-danger delete-btn">❌ Eliminar Cuenta</button>
         </form>
     </div>
 

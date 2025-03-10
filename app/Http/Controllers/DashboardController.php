@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Controlador del Panel de Usuario (Dashboard).
@@ -41,37 +42,47 @@ class DashboardController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request)
-    {
-        // Obtener el usuario autenticado
-        $user = User::find(Auth::id());
+{
+    $user = Auth::user(); // Obtiene el usuario autenticado
 
-        // Verificar si el usuario existe
-        if (!$user) {
-            return redirect()->route('dashboard')->with('error', 'Usuario no encontrado.');
-        }
-
-        // Validar los datos ingresados
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|min:6|confirmed',
-        ]);
-
-        // Actualizar los datos del usuario
-        $user->name = $request->name;
-        $user->email = $request->email;
-
-        // Actualizar la contraseña solo si se proporciona una nueva
-        if ($request->filled('password')) {
-            $user->password = bcrypt($request->password);
-        }
-
-        // Guardar los cambios en la base de datos
-        $user->save();
-
-        // Redirigir al dashboard con un mensaje de éxito
-        return redirect()->route('dashboard')->with('success', 'Perfil actualizado correctamente.');
+    if (!$user) {
+        return redirect()->route('dashboard')->with('error', 'Usuario no encontrado.');
     }
+
+    // Validación de los datos
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'password' => 'nullable|min:6|confirmed',
+        'phone' => 'nullable|string|max:20',
+        'address' => 'nullable|string|max:255',
+        'job' => 'nullable|string|max:255',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    // Si el usuario subió una nueva imagen, la almacenamos
+    if ($request->hasFile('image')) {
+        // Eliminamos la imagen anterior si existe
+        if ($user->image) {
+            Storage::delete('public/' . $user->image);
+        }
+        // Guardamos la nueva imagen
+        $validatedData['image'] = $request->file('image')->store('profile_images', 'public');
+    }
+
+    // Si hay contraseña, la encriptamos antes de actualizar
+    if ($request->filled('password')) {
+        $validatedData['password'] = bcrypt($request->password);
+    } else {
+        unset($validatedData['password']); // Eliminamos la clave si no se actualiza
+    }
+
+    // Actualizamos los datos del usuario sin usar `save()`
+    User::where('id', $user->id)->update($validatedData);
+
+    return redirect()->route('dashboard')->with('success', 'Perfil actualizado correctamente.');
+}
+
 
     /**
      * Elimina la cuenta del usuario autenticado.
