@@ -66,12 +66,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            color: #218838;
+            object-fit: cover;
         }
 
         .btn {
@@ -114,17 +109,27 @@
     <div class="content">
         <h2>Panel de Administrador</h2>
         <div class="profile-container">
-            <div class="profile-pic">📷</div>
+            <!-- Mostrar imagen de perfil si existe -->
+            @if($admin->profile_image)
+                <img src="{{ asset('storage/' . $admin->profile_image) }}" alt="Foto de perfil" class="profile-pic">
+            @else
+                <div class="profile-pic bg-secondary text-white d-flex align-items-center justify-content-center">
+                    📷
+                </div>
+            @endif
             <div>
                 <p><strong>Nombre:</strong> {{ $admin->name }}</p>
                 <p><strong>Email:</strong> {{ $admin->email }}</p>
+                <p><strong>Teléfono:</strong> {{ $admin->phone ?? 'No registrado' }}</p>
+                <p><strong>Dirección:</strong> {{ $admin->address ?? 'No registrada' }}</p>
+
                 <form action="{{ route('admin.logout') }}" method="POST" class="mt-auto">
                     @csrf
                     <button type="submit" class="btn">🚪 Cerrar Sesión</button>
                 </form>
-                
             </div>
         </div>
+
         <form action="{{ route('admin.destroy') }}" method="POST" 
               onsubmit="return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');">
             @csrf
@@ -132,5 +137,6 @@
             <button type="submit" class="btn delete-btn">❌ Eliminar Cuenta</button>
         </form>
     </div>
+
 </body>
 </html>

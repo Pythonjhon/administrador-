@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Perfil de Administrador</title>
-    <!-- Enlace a Bootstrap 5 para estilos -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
         body {
@@ -62,6 +61,15 @@
         .btn-primary:hover {
             background: #19692c;
         }
+
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto 10px;
+        }
     </style>
 </head>
 <body>
@@ -75,9 +83,20 @@
     <div class="content">
         <h2>Editar Perfil de Administrador</h2>
         <div class="form-container">
-            <form action="{{ route('admin.update') }}" method="POST">
+            <form action="{{ route('admin.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+
+                <!-- Vista previa de la imagen -->
+                <div class="text-center">
+                    <img id="imagePreview" src="{{ $admin->profile_picture ? asset('storage/' . $admin->profile_picture) : 'https://via.placeholder.com/120' }}" class="profile-picture" alt="Imagen de perfil">
+                </div>
+
+                <!-- Subir nueva imagen -->
+                <div class="mb-3">
+                    <label class="form-label">Imagen de Perfil:</label>
+                    <input type="file" name="profile_picture" class="form-control" accept="image/*" onchange="previewImage(event)">
+                </div>
 
                 <div class="mb-3">
                     <label class="form-label">Nombre:</label>
@@ -87,6 +106,25 @@
                 <div class="mb-3">
                     <label class="form-label">Correo Electrónico:</label>
                     <input type="email" name="email" class="form-control" value="{{ $admin->email }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Teléfono:</label>
+                    <input type="text" name="phone" class="form-control" value="{{ $admin->phone ?? '' }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Dirección:</label>
+                    <input type="text" name="address" class="form-control" value="{{ $admin->address ?? '' }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Rol de Administrador:</label>
+                    <select name="role" class="form-control" required>
+                        <option value="superadmin" {{ $admin->role == 'superadmin' ? 'selected' : '' }}>Super Administrador</option>
+                        <option value="moderador" {{ $admin->role == 'moderador' ? 'selected' : '' }}>Moderador</option>
+                        <option value="editor" {{ $admin->role == 'editor' ? 'selected' : '' }}>Editor</option>
+                    </select>
                 </div>
 
                 <div class="mb-3">
@@ -104,5 +142,17 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function(){
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+
 </body>
 </html>

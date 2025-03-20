@@ -2,161 +2,109 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
     <style>
-        /* Estilos generales del cuerpo */
-        body {
+        /* Reset y estilos base */
+        * {
             margin: 0;
             padding: 0;
-            min-height: 100vh;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: #f5f5f5;
-            font-family: Arial, sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #2e7d32, #4CAF50);
         }
 
-        /* Contenedor del título principal */
-        .title-container {
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             text-align: center;
-            margin-bottom: 30px;
-        }
-
-        /* Título principal */
-        .main-title {
-            color: #2e7d32;
-            font-size: 28px;
-            margin: 0;
-            padding: 0;
-            font-weight: bold;
-        }
-
-        /* Subtítulo */
-        .subtitle {
-            color: #4CAF50;
-            font-size: 20px;
-            margin-top: 10px;
-        }
-
-        /* Contenedor del formulario de inicio de sesión */
-        .login-container {
             width: 100%;
             max-width: 400px;
-            margin: 20px;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            background-color: white;
-            text-align: center;
         }
 
-        /* Estilo del formulario */
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        h1 {
+            font-size: 24px;
+            color: #2e7d32;
+            margin-bottom: 10px;
         }
 
-        /* Estilos para los campos de entrada */
+        .subtitle {
+            font-size: 16px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
         .form-input {
-            padding: 15px;
-            border: 2px solid #4CAF50;
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
             border-radius: 8px;
             font-size: 16px;
-            outline: none;
-            transition: all 0.3s ease;
-            width: 100%;
+            transition: all 0.3s;
         }
 
-        /* Efecto al enfocar un campo */
         .form-input:focus {
             border-color: #2e7d32;
-            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+            box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
         }
 
-        /* Botón de envío */
         .submit-button {
-            background-color: #4CAF50;
+            width: 100%;
+            background: #2e7d32;
             color: white;
-            padding: 15px;
+            padding: 14px;
+            font-size: 16px;
             border: none;
             border-radius: 8px;
-            font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
-            font-weight: bold;
+            transition: 0.3s;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            width: 100%;
         }
 
-        /* Efecto hover en el botón */
         .submit-button:hover {
-            background-color: #2e7d32;
+            background: #1b5e20;
         }
 
-        /* Color de los placeholders */
-        .form-input::placeholder {
-            color: #999;
-        }
-
-        /* Estilo del enlace de registro */
         .register-link {
             display: block;
             margin-top: 15px;
             font-size: 14px;
             color: #2e7d32;
-            font-weight: bold;
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: 0.3s;
         }
 
-        /* Efecto hover en el enlace */
         .register-link:hover {
             color: #1b5e20;
             text-decoration: underline;
         }
-
     </style>
 </head>
 <body>
 
-    <!-- Contenedor del título -->
-    <div class="title-container">
-        <h1 class="main-title">Bienvenido a la Corporación</h1>
+    <div class="container">
+        <h1>Bienvenido a la Corporación</h1>
         <div class="subtitle">Nuevo Talento Humano</div>
-    </div>
 
-    <!-- Contenedor del formulario de inicio de sesión -->
-    <div class="login-container">
-        <form method="POST" action="{{ route('login') }}" class="login-form" autocomplete="off">
+        <form method="POST" action="{{ route('login') }}" autocomplete="off">
             @csrf
-            
-            <!-- Campo para el correo electrónico -->
-            <input 
-                type="email" 
-                name="email" 
-                placeholder="Correo electrónico" 
-                required 
-                class="form-input"
-                autocomplete="off">
-            
-            <!-- Campo para la contraseña -->
-            <input 
-                type="password" 
-                name="password" 
-                placeholder="Contraseña" 
-                required 
-                class="form-input"
-                autocomplete="new-password">
-            
-            <!-- Botón para enviar el formulario -->
-            <button type="submit" class="submit-button">
-                Iniciar sesión
-            </button>
+
+            <input type="email" name="email" placeholder="Correo electrónico" required class="form-input" autocomplete="off">
+            <input type="password" name="password" placeholder="Contraseña" required class="form-input" autocomplete="new-password">
+
+            <button type="submit" class="submit-button">Iniciar sesión</button>
         </form>
 
-        <!-- Enlace de registro mejorado -->
         <a href="{{ route('register') }}" class="register-link">¿No tienes cuenta? Regístrate aquí</a>
     </div>
 

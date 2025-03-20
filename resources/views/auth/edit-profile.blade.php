@@ -5,198 +5,183 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Perfil</title>
     
-    <!-- Enlace a Bootstrap 5 para estilos -->
+    <!-- Bootstrap 5 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
+    
     <style>
-        /* Estilos generales del cuerpo */
         body {
             display: flex;
             min-height: 100vh;
-            background-color: #f8f9fa;
+            background-color: #f4f4f9;
         }
 
-        /* Barra lateral de navegación */
         .sidebar {
-            width: 250px;
-            background: #212529;
+            width: 280px;
+            background: #1e1e2d;
             color: white;
             padding: 20px;
             position: fixed;
             height: 100%;
             display: flex;
             flex-direction: column;
+            align-items: center;
         }
 
-        /* Enlaces de la barra lateral */
+        .profile-sidebar-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #ddd;
+            margin-bottom: 15px;
+        }
+
+        .profile-sidebar-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         .sidebar a {
-            color: white !important;
+            color: white;
             text-decoration: none;
             display: block;
             padding: 12px;
             margin: 8px 0;
             border-radius: 5px;
-            font-weight: 500;
-            transition: background-color 0.3s ease;
+            transition: 0.3s;
         }
 
-        /* Estilo cuando se pasa el cursor o está activo */
         .sidebar a:hover, .sidebar .active {
-            background: #2e7d32;
+            background: #28a745;
         }
 
-        /* Contenedor del contenido principal */
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            background: #dc3545;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #bb2d3b;
+        }
+
         .content {
-            margin-left: 270px;
+            margin-left: 300px;
             flex-grow: 1;
             padding: 30px;
         }
 
-        /* Contenedor del formulario */
-        .form-container {
+        .profile-container {
             background: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
-        /* Botón principal de actualización */
-        .btn-primary {
-            background: #2e7d32;
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #ddd;
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .delete-btn {
+            background: red;
             border: none;
-            transition: background 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background: #19692c;
-        }
-
-        /* Botón secundario (cancelar) */
-        .btn-secondary {
-            background: #6c757d;
-            border: none;
-        }
-
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-
-        /* Botón de cierre de sesión */
-        .logout-btn {
-            background: #2e7d32;
-            color: white;
-            text-align: center;
-            display: block;
             padding: 12px;
-            margin-top: 10px;
+            color: white;
+            font-weight: bold;
             border-radius: 5px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: background 0.3s ease;
+            transition: 0.3s;
         }
 
-        .logout-btn:hover {
-            background: #19692c;
+        .delete-btn:hover {
+            background: darkred;
         }
     </style>
 </head>
 <body>
-
-    <!-- Barra lateral -->
     <div class="sidebar">
         <h5>⚙️ Configuración</h5>
-        
-        <!-- Enlaces de navegación -->
         <a href="{{ route('dashboard') }}">🏠 Volver al Perfil</a>
         <a href="#" class="active">✏️ Editar Perfil</a>
-
-        <!-- Botón de cierre de sesión -->
+        {{-- <a href="#"> Cambiar Contraseña</a>
+        <a href="#">📧 Configuración de Notificaciones</a>
+        <a href="#">📝 Preferencias de Usuario</a>
+        <a href="#">📱 Dispositivos Conectados</a>
+        <a href="#">🆘 Centro de Ayuda</a>
+        <a href="#">📞 Soporte</a> --}}
         <form action="{{ route('logout') }}" method="POST" class="mt-auto">
             @csrf
             <button type="submit" class="logout-btn">🚪 Cerrar Sesión</button>
         </form>
     </div>
 
-    <!-- Contenido Principal -->
     <div class="content">
-        <h2>Editar Perfil</h2>
-
-        <!-- Mensaje de éxito si la actualización fue correcta -->
+        <h2 class="mb-4">Editar Perfil</h2>
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-       <!-- Formulario para actualizar datos del usuario -->
-<div class="form-container">
-    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-
-        <!-- Campo para el nombre -->
-        <div class="mb-3">
-            <label class="form-label">Nombre:</label>
-            <input type="text" name="name" class="form-control" value="{{ $user->name }}" required>
+        <div class="profile-container">
+            <div class="profile-pic">
+                <img src="{{ asset('storage/' . $user->image) }}" alt="Imagen de perfil">
+            </div>
+            <div>
+                <h4>{{ $user->name }}</h4>
+                <p>{{ $user->email }}</p>
+            </div>
         </div>
 
-        <!-- Campo para el correo -->
-        <div class="mb-3">
-            <label class="form-label">Email:</label>
-            <input type="email" name="email" class="form-control" value="{{ $user->email }}" required>
-        </div>
-
-        <!-- Campo para el teléfono -->
-        <div class="mb-3">
-            <label class="form-label">Teléfono:</label>
-            <input type="text" name="phone" class="form-control" value="{{ $user->phone }}">
-        </div>
-
-        <!-- Campo para la dirección -->
-        <div class="mb-3">
-            <label class="form-label">Dirección:</label>
-            <input type="text" name="address" class="form-control" value="{{ $user->address }}">
-        </div>
-
-        <!-- Campo para el rol en la fundación -->
-        <div class="mb-3">
-            <label class="form-label">Rol en la fundación:</label>
-            <input type="text" name="job" class="form-control" value="{{ $user->job }}">
-        </div>
-
-        <!-- Campo para la imagen de perfil -->
-        <div class="mb-3">
-            <label class="form-label">Imagen de Perfil:</label>
-            <input type="file" name="image" class="form-control">
-            
-            @if ($user->image)
-                <div class="mt-2">
-                    <img src="{{ asset('storage/' . $user->image) }}" alt="Imagen de perfil" width="100">
+        <div class="form-container mt-4">
+            <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="mb-3">
+                    <label class="form-label">Nombre:</label>
+                    <input type="text" name="name" class="form-control" value="{{ $user->name }}" required>
                 </div>
-            @endif
+                <div class="mb-3">
+                    <label class="form-label">Email:</label>
+                    <input type="email" name="email" class="form-control" value="{{ $user->email }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Teléfono:</label>
+                    <input type="text" name="phone" class="form-control" value="{{ $user->phone }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Dirección:</label>
+                    <input type="text" name="address" class="form-control" value="{{ $user->address }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Imagen de Perfil:</label>
+                    <input type="file" name="image" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-success w-100">Actualizar Perfil</button>
+                <a href="{{ route('dashboard') }}" class="btn btn-success w-100 mt-2">Cancelar</a>
+            </form>
         </div>
-
-        <!-- Campo para la nueva contraseña -->
-        <div class="mb-3">
-            <label class="form-label">Nueva Contraseña (opcional):</label>
-            <input type="password" name="password" class="form-control">
-        </div>
-
-        <!-- Campo para confirmar la nueva contraseña -->
-        <div class="mb-3">
-            <label class="form-label">Confirmar Contraseña:</label>
-            <input type="password" name="password_confirmation" class="form-control">
-        </div>
-
-        <!-- Botón para actualizar el perfil -->
-        <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
-        
-        <!-- Botón para cancelar y volver al perfil -->
-        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Cancelar</a>
-
-    </form>
-</div>
-
     </div>
-
 </body>
-
 </html>

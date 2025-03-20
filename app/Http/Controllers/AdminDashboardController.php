@@ -52,33 +52,43 @@ class AdminDashboardController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request)
-{
-    if (!Auth::guard('admin')->check()) {
-        return redirect()->route('admin.login')->with('error', 'Debes iniciar sesión.');
+    {
+        if (!Auth::guard('admin')->check()) {
+            return redirect()->route('admin.login')->with('error', 'Debes iniciar sesión.');
+        }
+        
+        $admin = Auth::guard('admin')->user();
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:admins,email,' . $admin->id,
+            'phone' => 'nullable|string|max:15', // Validación para el teléfono
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validación para imagen
+            'address' => 'nullable|string|max:500', // Validación para dirección
+            'password' => 'nullable|min:6|confirmed',
+        ]);
+        
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+        ];
+        
+        if ($request->hasFile('profile_image')) {
+            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+            $data['profile_image'] = $imagePath;
+        }
+    
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+        
+        Admin::where('id', $admin->id)->update($data);
+        
+        return redirect()->route('admin.dashboard')->with('success', 'Perfil actualizado correctamente.');
     }
     
-    $admin = Auth::guard('admin')->user();
-    
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:admins,email,' . $admin->id,
-        'password' => 'nullable|min:6|confirmed',
-    ]);
-    
-    $data = [
-        'name' => $request->name,
-        'email' => $request->email
-    ];
-    
-    if ($request->filled('password')) {
-        $data['password'] = bcrypt($request->password);
-    }
-    
-    // Usar update() en el modelo Admin directamente
-    Admin::where('id', $admin->id)->update($data);
-    
-    return redirect()->route('admin.dashboard')->with('success', 'Perfil actualizado correctamente.');
-}
     /**
      * Elimina la cuenta del administrador autenticado.
      *
