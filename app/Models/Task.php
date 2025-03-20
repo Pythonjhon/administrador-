@@ -17,15 +17,14 @@ class Task extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'description', 'completed', 'image', 'user_id', 'archivo'];
-
+    protected $fillable = ['title', 'description', 'completed', 'image', 'assigned_to', 'archivo'];
     /**
      * Relación: una tarea pertenece a un usuario.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
-{
-    return $this->belongsTo(User::class, 'assigned_to');
-}
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
 }

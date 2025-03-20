@@ -47,6 +47,7 @@
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             background-color: white;
+            text-align: center;
         }
 
         /* Estilo del formulario */
@@ -64,6 +65,7 @@
             font-size: 16px;
             outline: none;
             transition: all 0.3s ease;
+            width: 100%;
         }
 
         /* Efecto al enfocar un campo */
@@ -85,6 +87,7 @@
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
+            width: 100%;
         }
 
         /* Efecto hover en el botón */
@@ -96,6 +99,24 @@
         .form-input::placeholder {
             color: #999;
         }
+
+        /* Estilo del enlace de registro */
+        .register-link {
+            display: block;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #2e7d32;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        /* Efecto hover en el enlace */
+        .register-link:hover {
+            color: #1b5e20;
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 <body>
@@ -134,7 +155,9 @@
                 Iniciar sesión
             </button>
         </form>
-        
+
+        <!-- Enlace de registro mejorado -->
+        <a href="{{ route('register') }}" class="register-link">¿No tienes cuenta? Regístrate aquí</a>
     </div>
 
 </body>

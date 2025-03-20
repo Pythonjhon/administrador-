@@ -74,38 +74,35 @@ class UserManagementController extends Controller
     /**
      * Asigna una tarea a un usuario.
      */
-   public function assignTask(Request $request)
-{
-    // Validar los datos del formulario, incluyendo el usuario
-    $request->validate([
-        'user_id' => 'required|exists:users,id',
-        'title' => 'required|string|max:255',
-        'description' => 'nullable|string',
-        'completed' => 'required|boolean',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'archivo' => 'nullable|mimes:pdf,doc,docx,xlsx,csv|max:5120',
-    ]);
-
-    $user = User::findOrFail($request->user_id);
-
-    // Subir imagen si está presente
-    $imagePath = $request->file('image') ? $request->file('image')->store('tasks/images', 'public') : null;
-
-    // Subir archivo adjunto si está presente
-    $archivoPath = $request->file('archivo') ? $request->file('archivo')->store('tasks/files', 'public') : null;
-
-    // Crear la tarea
-    Task::create([
-        'title' => $request->title,
-        'description' => $request->description,
-        'assigned_to' => $user->id,
-        'completed' => $request->completed,
-        'image' => $imagePath,
-        'archivo' => $archivoPath,
-    ]);
-
-    return redirect()->route('users.index')->with('success', 'Tarea asignada correctamente.');
-}
-
+    public function assignTask(Request $request)
+    {
+        // Validar los datos del formulario
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'completed' => 'required|boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'archivo' => 'nullable|mimes:pdf,doc,docx,xlsx,csv|max:5120',
+        ]);
+    
+        // Subir imagen si está presente
+        $imagePath = $request->file('image') ? $request->file('image')->store('tasks/images', 'public') : null;
+    
+        // Subir archivo adjunto si está presente
+        $archivoPath = $request->file('archivo') ? $request->file('archivo')->store('tasks/files', 'public') : null;
+    
+        // Crear la tarea con el usuario asignado
+        Task::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'completed' => $request->completed,
+            'image' => $imagePath,
+            'archivo' => $archivoPath,
+            'assigned_to' => $request->user_id, // Aquí se asigna correctamente al usuario específico
+        ]);
+    
+        return redirect()->route('users.index')->with('success', 'Tarea asignada correctamente.');
+    }
 }
 
