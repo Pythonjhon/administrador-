@@ -6,74 +6,246 @@
     <title>Editar Perfil de Administrador</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
+       :root {
+            --primary-color: #0e5937;
+            --secondary-color: #f8f9fa;
+            --sidebar-width: 250px;
+            --sidebar-dark: #1a2942;
+            --accent-color: #16a34a;
+            --text-light: #e2e8f0;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
         body {
             display: flex;
             min-height: 100vh;
-            background-color: #f8f9fa;
+            background-color: #f4f7f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
         }
 
+        /* Sidebar styles */
         .sidebar {
-            width: 250px;
-            background: #212529;
-            color: white;
-            padding: 20px;
+            width: var(--sidebar-width);
+            background: var(--sidebar-dark);
+            color: var(--text-light);
+            padding: 25px 15px;
             position: fixed;
             height: 100%;
             display: flex;
             flex-direction: column;
+            z-index: 1000;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.15);
+            overflow-y: auto;
+        }
+
+        .sidebar h5 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: white;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar a {
-            color: white !important;
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
-            display: block;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 5px;
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            margin-bottom: 8px;
             font-weight: 500;
-            transition: background-color 0.3s ease;
         }
 
-        .sidebar a:hover, .sidebar .active {
-            background: #2e7d32;
+        .sidebar a:hover, .sidebar a.active {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
+        .sidebar a.active {
+            border-left: 4px solid white;
+        }
+
+        /* Content styles */
         .content {
-            margin-left: 270px;
+            margin-left: var(--sidebar-width);
             flex-grow: 1;
             padding: 30px;
+            max-width: calc(100% - var(--sidebar-width));
+        }
+
+        .content h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #222;
+            margin-top: 0;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eaeaea;
         }
 
         .form-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
-        .btn-primary {
-            background: #2e7d32;
-            border: none;
-            transition: background 0.3s ease;
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #444;
         }
 
-        .btn-primary:hover {
-            background: #19692c;
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(22, 163, 74, 0.15);
+        }
+
+        .mb-3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .text-center {
+            text-align: center;
         }
 
         .profile-picture {
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             object-fit: cover;
-            display: block;
-            margin: 0 auto 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 4px solid white;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            font-size: 0.9rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+            border: 1px solid transparent;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 2px 4px rgba(22, 163, 74, 0.2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #15803d;
+            border-color: #15803d;
+            box-shadow: 0 4px 6px rgba(22, 163, 74, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+            box-shadow: 0 4px 6px rgba(108, 117, 125, 0.3);
+        }
+
+        /* Form section spacing */
+        form > div:not(:last-child) {
+            margin-bottom: 15px;
+        }
+
+        /* Button spacing */
+        form button, form a.btn {
+            margin-right: 10px;
+            margin-top: 15px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991px) {
+            :root {
+                --sidebar-width: 220px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            :root {
+                --sidebar-width: 0;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+                width: 250px;
+            }
+            
+            .content {
+                margin-left: 0;
+                max-width: 100%;
+                padding: 20px;
+            }
+            
+            .toggle-sidebar {
+                display: block;
+                position: fixed;
+                top: 15px;
+                left: 15px;
+                z-index: 1010;
+                background: var(--accent-color);
+                color: white;
+                border: none;
+                border-radius: 5px;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            }
         }
     </style>
 </head>
 <body>
-
     <div class="sidebar">
         <h5>⚙️ Configuración</h5>
         <a href="{{ route('admin.dashboard') }}">🏠 Volver al Panel</a>
@@ -89,7 +261,7 @@
 
                 <!-- Vista previa de la imagen -->
                 <div class="text-center">
-                    <img id="imagePreview" src="{{ $admin->profile_picture ? asset('storage/' . $admin->profile_picture) : 'https://via.placeholder.com/120' }}" class="profile-picture" alt="Imagen de perfil">
+                    <img id="imagePreview" src="{{ $admin->profile_picture ? asset('storage/' . $admin->profile_picture) : 'https://via.placeholder.com/140' }}" class="profile-picture" alt="Imagen de perfil">
                 </div>
 
                 <!-- Subir nueva imagen -->
@@ -153,6 +325,5 @@
             reader.readAsDataURL(event.target.files[0]);
         }
     </script>
-
 </body>
 </html>

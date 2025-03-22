@@ -7,33 +7,77 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #0e5937;
+            --secondary-color: #f8f9fa;
+            --sidebar-width: 250px;
+            --sidebar-dark: #1a1a2e;
+            --accent-color: #16a34a;
+            --text-light: #e2e8f0;
+            --border-radius: 6px;
+            --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
         body {
             display: flex;
             min-height: 100vh;
-            background-color: #f4f4f9;
+            background-color: #f4f7f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
         }
 
         /* Sidebar styles */
         .sidebar {
-            width: 280px;
-            background: #1e1e2d;
-            color: white;
-            padding: 20px;
+            width: var(--sidebar-width);
+            background: var(--sidebar-dark);
+            color: var(--text-light);
+            padding: 15px;
             position: fixed;
             height: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
             z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+        }
+
+        .logo-accent {
+            color: var(--accent-color);
+        }
+
+        .user-info {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .profile-sidebar-pic {
-            width: 100px;
-            height: 100px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             overflow: hidden;
-            background: #ddd;
-            margin-bottom: 15px;
+            background: #e0e0e0;
+            margin: 0 auto 10px;
+            border: 2px solid var(--accent-color);
         }
 
         .profile-sidebar-pic img {
@@ -42,268 +86,463 @@
             object-fit: cover;
         }
 
-        .user-info {
-            text-align: center;
-            margin-bottom: 20px;
-            width: 100%;
+        .user-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+            color: white;
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0;
+        }
+
+        .nav-section {
+            margin-bottom: 15px;
+        }
+
+        .nav-header {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+            padding-left: 8px;
         }
 
         .nav-menu {
-            width: 100%;
-            margin-bottom: 20px;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
         }
 
-        .sidebar-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #a0a0b0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .nav-item {
+            margin-bottom: 3px;
         }
 
-        .sidebar a {
-            color: white;
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
-            display: block;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 5px;
-            transition: 0.3s;
-            width: 100%;
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
         }
 
-        .sidebar a:hover, .sidebar .active {
-            background: #28a745;
+        .nav-link:hover, .nav-link.active {
+            background: var(--accent-color);
+            color: white;
         }
 
-        .sidebar .btn {
-            width: 100%;
-            text-align: left;
-            padding: 12px;
-            margin: 8px 0;
-        }
-
-        .sidebar .btn i {
+        .nav-link i {
             margin-right: 8px;
+            font-size: 1rem;
+            width: 16px;
+            text-align: center;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: auto;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .logout-btn {
+            display: flex;
+            align-items: center;
             width: 100%;
-            padding: 12px;
-            margin-top: auto;
+            padding: 8px 12px;
             border: none;
-            border-radius: 5px;
-            background: #dc3545;
+            border-radius: var(--border-radius);
+            background: rgba(220, 53, 69, 0.8);
             color: white;
-            font-weight: bold;
-            transition: 0.3s;
+            font-weight: 500;
+            transition: var(--transition);
             text-align: left;
+            font-size: 0.9rem;
         }
 
         .logout-btn:hover {
-            background: #bb2d3b;
+            background: #dc3545;
+        }
+
+        .logout-btn i {
+            margin-right: 8px;
         }
 
         /* Content styles */
         .content {
-            margin-left: 280px;
+            margin-left: var(--sidebar-width);
             flex-grow: 1;
-            padding: 30px;
+            padding: 20px;
+            max-width: calc(100% - var(--sidebar-width));
         }
 
         .page-header {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .page-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
         }
 
         .card {
-            border-radius: 8px;
+            border-radius: var(--border-radius);
             border: none;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            box-shadow: var(--box-shadow);
             margin-bottom: 20px;
+            background-color: white;
+            overflow: hidden;
         }
 
-        .task-image {
-            width: 60px;
-            height: 60px;
+        .card-header {
+            background-color: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .profile-container {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #e0e0e0;
+            box-shadow: var(--box-shadow);
+            border: 3px solid white;
+            flex-shrink: 0;
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .badge {
+        .profile-info {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .info-item {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #555;
+            width: 100px;
+            min-width: 100px;
+        }
+
+        .info-value {
+            color: #333;
+            flex: 1;
+        }
+
+        .btn {
             font-size: 0.85rem;
-            font-weight: 500;
-            padding: 0.5em 0.75em;
+            padding: 0.375rem 0.75rem;
         }
 
-        .table {
-            vertical-align: middle;
+        .btn-primary {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 2px 4px rgba(22, 163, 74, 0.2);
         }
 
-        .table thead th {
-            background: #28a745;
+        .btn-primary:hover {
+            background-color: #15803d;
+            border-color: #15803d;
+        }
+
+        .btn-outline-primary {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
             color: white;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .delete-btn {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.2);
             font-weight: 500;
-            border: none;
-            padding: 12px 15px;
-        }
-
-        .table thead th:first-child {
-            border-top-left-radius: 8px;
-        }
-        
-        .table thead th:last-child {
-            border-top-right-radius: 8px;
-        }
-
-        .table tbody tr:hover {
-            background-color: rgba(40, 167, 69, 0.05);
-        }
-
-        .btn-sm {
-            padding: 0.35rem 0.65rem;
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
             font-size: 0.85rem;
+        }
+
+        .delete-btn:hover {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .delete-btn i {
+            margin-right: 5px;
         }
 
         .action-buttons {
+            margin-top: 15px;
             display: flex;
-            gap: 5px;
+            gap: 8px;
         }
 
-        .action-buttons .btn {
+        .empty-profile-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 2rem;
+            color: #999;
+            box-shadow: var(--box-shadow);
+            border: 3px solid white;
+            flex-shrink: 0;
         }
 
-        .action-buttons .btn i {
-            margin-right: 4px;
+        /* Responsive adjustments */
+        @media (max-width: 991px) {
+            :root {
+                --sidebar-width: 220px;
+            }
+            
+            .profile-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .info-item {
+                text-align: left;
+            }
+            
+            .action-buttons {
+                justify-content: center;
+            }
         }
 
-        .pagination {
-            justify-content: center;
-        }
-
-        .pagination .page-item.active .page-link {
-            background-color: #28a745;
-            border-color: #28a745;
-        }
-
-        .pagination .page-link {
-            color: #28a745;
-        }
-
-        .filter-badge {
-            background-color: #f5f5f5;
-            color: #444;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            margin-right: 10px;
-        }
-        
-        .filter-badge.active {
-            background-color: #28a745;
-            color: white;
-        }
-        
-        .filter-badge i {
-            margin-right: 5px;
+        @media (max-width: 767px) {
+            :root {
+                --sidebar-width: 0;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+                width: 250px;
+            }
+            
+            .content {
+                margin-left: 0;
+                max-width: 100%;
+            }
+            
+            .toggle-sidebar {
+                display: block;
+                position: fixed;
+                top: 15px;
+                left: 15px;
+                z-index: 1010;
+                background: var(--accent-color);
+                color: white;
+                border: none;
+                border-radius: 5px;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            }
+            
+            .page-header {
+                margin-top: 50px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="profile-sidebar-pic">
-            <img src="/api/placeholder/100/100" alt="Imagen de perfil">
+        <div class="sidebar-header">
+            <h3 class="logo">Task<span class="logo-accent">Manager</span></h3>
         </div>
+        
         <div class="user-info">
-            <h5 class="mb-1">{{ Auth::user()->name }}</h5>
-            <p class="small text-muted mb-3">{{ Auth::user()->email }}</p>
+            <div class="profile-sidebar-pic">
+                <img src="/api/placeholder/100/100" alt="Imagen de perfil">
+            </div>
+            <h4 class="user-name">{{ Auth::user()->name }}</h4>
+            <p class="user-role">{{ Auth::user()->email }}</p>
         </div>
         
-        <div class="nav-menu">
-            <div class="sidebar-title">Gestión de Tareas</div>
-            
-            <a href="{{ route('tasks.index') }}" class="active">
-                <i class="fas fa-list me-2"></i> Todas las Tareas
-            </a>
-            <a href="{{ route('tasks.index', ['filter' => 'completed']) }}">
-                <i class="fas fa-check-circle me-2"></i> Completadas
-            </a>
-            <a href="{{ route('tasks.index', ['filter' => 'pending']) }}">
-                <i class="fas fa-clock me-2"></i> Pendientes
-            </a>
-            
-            <div class="sidebar-title mt-4">Acciones</div>
-            
-            <a href="{{ route('tasks.create') }}" class="btn btn-success">
-                <i class="fas fa-plus"></i> Nueva Tarea
-            </a>
-            
-            <a href="{{ route('dashboard') }}" class="btn btn-outline-light mt-2">
-                <i class="fas fa-user"></i> Mi Perfil
-            </a>
+        <div class="nav-section">
+            <h5 class="nav-header">Gestión de Tareas</h5>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{{ route('tasks.index') }}" class="nav-link active">
+                        <i class="fa fa-list"></i> Todas las Tareas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('tasks.index', ['filter' => 'completed']) }}" class="nav-link">
+                        <i class="fa fa-check-circle"></i> Completadas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('tasks.index', ['filter' => 'pending']) }}" class="nav-link">
+                        <i class="fa fa-clock"></i> Pendientes
+                    </a>
+                </li>
+            </ul>
         </div>
         
-        <form action="{{ route('logout') }}" method="POST" class="mt-auto w-100">
-            @csrf
-            <button type="submit" class="logout-btn">
-                <i class="fas fa-sign-out-alt me-2"></i> Cerrar Sesión
-            </button>
-        </form>
+        <div class="nav-section">
+            <h5 class="nav-header">Acciones</h5>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{{ route('tasks.create') }}" class="nav-link">
+                        <i class="fa fa-plus"></i> Nueva Tarea
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('dashboard') }}" class="nav-link">
+                        <i class="fa fa-user"></i> Mi Perfil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('welcome') }}" class="nav-link">
+                        <i class="fa fa-home"></i> Volver a Inicio
+                    </a>
+                </li>
+            </ul>
+        </div>
         
-        <a href="{{ route('welcome') }}" class="btn btn-outline-secondary mt-2">
-            <i class="fas fa-home me-2"></i> Volver a Inicio
-        </a>
+        <div class="sidebar-footer">
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="logout-btn">
+                    <i class="fa fa-sign-out"></i> Cerrar Sesión
+                </button>
+            </form>
+        </div>
     </div>
 
     <!-- Main Content -->
     <div class="content">
         <div class="page-header">
-            <div>
-                <h2 class="mb-2">Panel de Tareas</h2>
-                <div class="d-flex">
-                    <a href="{{ route('tasks.index') }}" class="filter-badge {{ !$filter ? 'active' : '' }}">
-                        <i class="fas fa-list"></i> Todas
-                    </a>
-                    <a href="{{ route('tasks.index', ['filter' => 'completed']) }}" class="filter-badge {{ $filter == 'completed' ? 'active' : '' }}">
-                        <i class="fas fa-check-circle"></i> Completadas
-                    </a>
-                    <a href="{{ route('tasks.index', ['filter' => 'pending']) }}" class="filter-badge {{ $filter == 'pending' ? 'active' : '' }}">
-                        <i class="fas fa-clock"></i> Pendientes
-                    </a>
-                </div>
+            <h1 class="page-title">Panel de Tareas</h1>
+            <div class="header-actions">
+                <a href="{{ route('tasks.create') }}" class="btn btn-primary">
+                    <i class="fa fa-plus"></i> Nueva Tarea
+                </a>
             </div>
-            <a href="{{ route('tasks.create') }}" class="btn btn-success">
-                <i class="fas fa-plus me-2"></i> Nueva Tarea
-            </a>
         </div>
         
         <div class="card">
-            <div class="card-body p-0">
+            <div class="card-header">
+                <h2 class="card-title">Lista de tareas</h2>
+                <div style="display: flex; gap: 10px;">
+                    <a href="{{ route('tasks.index') }}" class="btn btn-sm {{ !$filter ? 'btn-primary' : 'btn-outline-primary' }}">
+                        <i class="fa fa-list"></i> Todas
+                    </a>
+                    <a href="{{ route('tasks.index', ['filter' => 'completed']) }}" class="btn btn-sm {{ $filter == 'completed' ? 'btn-primary' : 'btn-outline-primary' }}">
+                        <i class="fa fa-check-circle"></i> Completadas
+                    </a>
+                    <a href="{{ route('tasks.index', ['filter' => 'pending']) }}" class="btn btn-sm {{ $filter == 'pending' ? 'btn-primary' : 'btn-outline-primary' }}">
+                        <i class="fa fa-clock"></i> Pendientes
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0">
+                    <table class="table">
                         <thead>
                             <tr>
-                                <th width="60">ID</th>
-                                <th width="80">Imagen</th>
-                                <th width="110">Archivo</th>
+                                <th>ID</th>
+                                <th>Imagen</th>
+                                <th>Archivo</th>
                                 <th>Nombre</th>
                                 <th>Descripción</th>
-                                <th>Asignado a</th>
+                                <th>Asignado</th>
                                 <th>Creación</th>
                                 <th>Estado</th>
-                                <th width="200">Acciones</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -312,48 +551,50 @@
                                     <td>{{ $task->id }}</td>
                                     <td>
                                         @if ($task->image)
-                                            <img src="{{ asset('storage/' . $task->image) }}" alt="Imagen" class="task-image">
+                                            <img src="{{ asset('storage/' . $task->image) }}" alt="Imagen" style="width: 50px; height: 50px; object-fit: cover; border-radius: var(--border-radius);">
                                         @else
-                                            <span class="text-muted"><i class="fas fa-image fa-2x text-light"></i></span>
+                                            <div style="width: 50px; height: 50px; background-color: #e0e0e0; display: flex; align-items: center; justify-content: center; border-radius: var(--border-radius);">
+                                                <i class="fa fa-image" style="color: #aaa;"></i>
+                                            </div>
                                         @endif
                                     </td>
                                     <td>
                                         @if ($task->archivo)
-                                            <a href="{{ asset('storage/' . $task->archivo) }}" class="btn btn-sm btn-info" target="_blank">
-                                                <i class="fas fa-download me-1"></i> Archivo
+                                            <a href="{{ asset('storage/' . $task->archivo) }}" class="btn btn-outline-primary" target="_blank">
+                                                <i class="fa fa-download"></i> Archivo
                                             </a>
                                         @else
-                                            <span class="text-muted small">Sin archivo</span>
+                                            <span style="color: #888;">Sin archivo</span>
                                         @endif
                                     </td>
-                                    <td class="fw-medium">{{ $task->title }}</td>
+                                    <td style="font-weight: 600;">{{ $task->title }}</td>
                                     <td>{{ Str::limit($task->description, 50) }}</td>
                                     <td>{{ $task->assigned_to }}</td>
-                                    <td><span class="text-muted">{{ $task->created_at->format('d/m/Y H:i') }}</span></td>
+                                    <td>{{ $task->created_at->format('d/m/Y H:i') }}</td>
                                     <td>
-                                        <span class="badge {{ $task->completed ? 'bg-success' : 'bg-warning' }}">
-                                            <i class="fas {{ $task->completed ? 'fa-check-circle' : 'fa-clock' }} me-1"></i>
+                                        <span style="display: inline-block; padding: 5px 8px; border-radius: var(--border-radius); background-color: {{ $task->completed ? 'var(--accent-color)' : '#f59e0b' }}; color: white; font-size: 0.85rem;">
+                                            <i class="fa {{ $task->completed ? 'fa-check-circle' : 'fa-clock' }}"></i>
                                             {{ $task->completed ? 'Completada' : 'Pendiente' }}
                                         </span>
                                     </td>
                                     <td>
-                                        <div class="action-buttons">
+                                        <div style="display: flex; gap: 5px;">
                                             <form action="{{ route('tasks.toggle', $task->id) }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
-                                                <button type="submit" class="btn btn-sm {{ $task->completed ? 'btn-warning' : 'btn-success' }}">
-                                                    <i class="fas {{ $task->completed ? 'fa-clock' : 'fa-check' }}"></i>
-                                                    {{ $task->completed ? 'Pendiente' : 'Completar' }}
+                                                <button type="submit" class="btn btn-sm {{ $task->completed ? 'btn-outline-primary' : 'btn-primary' }}">
+                                                    <i class="fa {{ $task->completed ? 'fa-clock' : 'fa-check' }}"></i>
+                                                    {{ $task->completed ? 'Marcar Pendiente' : 'Completar' }}
                                                 </button>
                                             </form>
                                             <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-primary">
-                                                <i class="fas fa-edit"></i> Editar
+                                                <i class="fa fa-edit"></i> Editar
                                             </a>
                                             <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('¿Está seguro que desea eliminar esta tarea?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-trash"></i>
+                                                <button type="submit" class="delete-btn">
+                                                    <i class="fa fa-trash"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -365,10 +606,9 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex justify-content-center mt-4">
+        <div style="display: flex; justify-content: center; margin-top: 20px;">
             {{ $tasks->appends(['filter' => $filter])->links() }}
         </div>
     </div>
-
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
