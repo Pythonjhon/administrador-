@@ -95,6 +95,13 @@
         <h1>Crear Nueva Cuenta</h1>
         <p class="subtitle">Regístrate para acceder</p>
         
+        {{-- Mostrar errores generales del sistema --}}
+        @if ($errors->has('general'))
+            <div class="error-message" style="color: red; font-size: 14px; margin-bottom: 15px;">
+                {{ $errors->first('general') }}
+            </div>
+        @endif
+        
         <form method="POST" action="{{ route('register') }}" autocomplete="off">
             @csrf  <!-- Token de seguridad de Laravel para evitar ataques CSRF -->
             
@@ -104,16 +111,32 @@
                 placeholder="Nombre completo" 
                 required 
                 class="form-input"
-                autocomplete="off">
-            
+                autocomplete="off"
+                value="{{ old('name') }}">
+
+            {{-- Mostrar mensaje de error del nombre --}}
+            @error('name')
+                <div class="error-message" style="color: red; font-size: 14px;">
+                    {{ $message }}
+                </div>
+            @enderror
+
             <input 
                 type="email" 
                 name="email" 
                 placeholder="Correo electrónico" 
                 required 
                 class="form-input"
-                autocomplete="off">
-            
+                autocomplete="off"
+                value="{{ old('email') }}">
+
+            {{-- Mostrar mensaje si el correo ya está registrado --}}
+            @error('email')
+                <div class="error-message" style="color: red; font-size: 14px;">
+                    {{ $message }}
+                </div>
+            @enderror
+
             <input 
                 type="password" 
                 name="password" 
@@ -121,6 +144,16 @@
                 required 
                 class="form-input"
                 autocomplete="new-password">
+                
+            {{-- Mostrar mensaje de error de la contraseña --}}
+            @error('password')
+                <div class="error-message" style="color: red; font-size: 14px;">
+                    {{ $message }}
+                </div>
+            @enderror
+            
+            {{-- Requisitos de contraseña segura --}}
+            
             
             <input 
                 type="password" 
@@ -138,4 +171,5 @@
         <a href="{{ route('login') }}" class="register-link">¿Ya tienes una cuenta? Iniciar sesión</a>
     </div>
 </body>
+
 </html>

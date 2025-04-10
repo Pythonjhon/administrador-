@@ -108,17 +108,19 @@ class AuthAdminController extends Controller
             'password' => 'nullable|min:6|confirmed',
         ]);
     
-        // Actualizar los datos usando update() en lugar de save()
-        $admin = Auth::guard('admin')->user();
-
-        if (!$admin) {
-            return redirect()->route('admin.login')->with('error', 'No se encontró el administrador.');
+        // Actualizar los datos básicos
+        $admin->name = $request->name;
+        $admin->email = $request->email;
+        
+        // Actualizar la contraseña solo si se proporciona
+        if ($request->filled('password')) {
+            $admin->password = Hash::make($request->password);
         }
         
-        dd($admin); // Verifica que el objeto tiene datos
-        
+        // Guardar los cambios
+        $admin = Admin::find(Auth::guard('admin')->id());
+        $admin->save();
     
         return redirect()->route('admin.dashboard')->with('success', 'Perfil actualizado correctamente.');
     }
-    
 }

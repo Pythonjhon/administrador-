@@ -28,28 +28,36 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request  Datos del formulario de registro.
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function register(Request $request)
-    {
-        // Validar los datos del formulario
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
+   public function register(Request $request)
+{
+    // Validar los datos del formulario con mensajes personalizados
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users,email',
+        'password' => 'required|string|min:6|confirmed',
+    ], [
+        'name.required' => 'El nombre es obligatorio.',
+        'email.required' => 'El correo electrónico es obligatorio.',
+        'email.email' => 'El correo electrónico no es válido.',
+        'email.unique' => 'El correo electrónico ya está registrado.',
+        'password.required' => 'La contraseña es obligatoria.',
+        'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
+        'password.confirmed' => 'La confirmación de la contraseña no coincide.',
+    ]);
 
-        // Crear el usuario en la base de datos
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
+    // Crear el usuario en la base de datos
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => bcrypt($request->password),
+    ]);
 
-        // Iniciar sesión automáticamente después del registro
-        Auth::login($user);
+    // Iniciar sesión automáticamente después del registro
+    Auth::login($user);
 
-        // Redirigir a la lista de tareas
-        return redirect()->route('tasks.index');
-    }
+    // Redirigir a la lista de tareas
+    return redirect()->route('tasks.index');
+}
 
     /**
      * Muestra el formulario de inicio de sesión.

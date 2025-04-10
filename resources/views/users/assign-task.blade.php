@@ -446,12 +446,38 @@
         
         <div class="card">
             <div class="card-header">
-                <h2 class="card-title">Asignar Tarea a {{ $user->name }}</h2>
+                <h2 class="card-title">
+                    @if(isset($user))
+                        Asignar Tarea a {{ $user->name }}
+                    @else
+                        Asignar Tarea a Usuarios
+                    @endif
+                </h2>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ route('users.assign-task.store', $user->id) }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ isset($user) ? route('users.assign-task.store', $user->id) : route('users.bulk-assign-task.store') }}" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="user_id" value="{{ $user->id }}">
+                    
+                    @if(isset($user))
+                        <!-- Asignación a un solo usuario -->
+                        <input type="hidden" name="user_id" value="{{ $user->id }}">
+                    @else
+                        <!-- Asignación a múltiples usuarios -->
+                        <div class="info-item">
+                            <label for="user_ids" class="info-label">Seleccionar Usuarios</label>
+                            <div class="info-value">
+                                <select class="form-control" id="user_ids" name="user_ids[]" multiple required size="8">
+                                    @foreach($users as $singleUser)
+                                        <option value="{{ $singleUser->id }}">{{ $singleUser->name }} ({{ $singleUser->email }})</option>
+                                    @endforeach
+                                </select>
+                                <div class="selection-helpers mt-2">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="selectAll">Seleccionar todos</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="deselectAll">Deseleccionar todos</button>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     
                     <div class="info-item">
                         <label for="title" class="info-label">Título</label>
@@ -497,9 +523,65 @@
                 
                     <div class="action-buttons">
                         <a href="{{ route('users.index') }}" class="btn btn-outline-primary">Cancelar</a>
-                        <button type="submit" class="btn btn-primary">Asignar Tarea</button>
+                        <button type="submit" class="btn btn-primary">
+                            {{ isset($user) ? 'Asignar Tarea' : 'Asignar Tareas a Seleccionados' }}
+                        </button>
                     </div>
                 </form>
+                
+                @if(!isset($user))
+                <!-- Formulario para asignar a TODOS los usuarios -->
+                <div class="mt-4 pt-4 border-top">
+                    <h3>Asignar a todos los usuarios</h3>
+                    <p class="text-warning">Esta acción creará la misma tarea para todos los usuarios del sistema.</p>
+                    
+                    <form method="POST" action="{{ route('users.assign-task-all') }}" id="assignToAllForm" enctype="multipart/form-data">
+                        @csrf
+                        <!-- Los campos se copiarán del formulario principal -->
+                        <input type="hidden" id="copy-title" name="title">
+                        <input type="hidden" id="copy-description" name="description">
+                        <!-- No se pueden copiar los archivos automáticamente, tendrían que subirse en ambos formularios -->
+                        <input type="hidden" id="copy-completed" name="completed" value="0">
+                        
+                        <button type="button" id="copyAndSubmit" class="btn btn-warning">
+                            Asignar a TODOS los usuarios
+                        </button>
+                    </form>
+                </div>
+                
+                <script>
+                    // Script para manejar la selección de usuarios
+                    document.getElementById('selectAll').addEventListener('click', function() {
+                        var options = document.getElementById('user_ids').options;
+                        for (var i = 0; i < options.length; i++) {
+                            options[i].selected = true;
+                        }
+                    });
+                    
+                    document.getElementById('deselectAll').addEventListener('click', function() {
+                        var options = document.getElementById('user_ids').options;
+                        for (var i = 0; i < options.length; i++) {
+                            options[i].selected = false;
+                        }
+                    });
+                    
+                    // Script para copiar datos al formulario de "asignar a todos"
+                    document.getElementById('copyAndSubmit').addEventListener('click', function() {
+                        if (confirm('¿Estás seguro de que deseas asignar esta tarea a TODOS los usuarios del sistema?')) {
+                            // Copiar valores del formulario principal
+                            document.getElementById('copy-title').value = document.getElementById('title').value;
+                            document.getElementById('copy-description').value = document.getElementById('description').value;
+                            
+                            // Obtener valor de radio button
+                            var completedValue = document.querySelector('input[name="completed"]:checked').value;
+                            document.getElementById('copy-completed').value = completedValue;
+                            
+                            // Enviar formulario
+                            document.getElementById('assignToAllForm').submit();
+                        }
+                    });
+                </script>
+                @endif
             </div>
         </div>
     </div>
