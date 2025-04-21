@@ -444,9 +444,13 @@
         </div>
         
         <div class="user-info">
-            <div class="profile-sidebar-pic">
-                <img src="/api/placeholder/100/100" alt="Imagen de perfil">
-            </div>
+        <div class="profile-sidebar-pic">
+          @if(Auth::user()->image)
+         <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="Imagen de perfil">
+          @else
+        <img src="{{ asset('images/default-profile.png') }}" alt="Imagen de perfil por defecto">
+    @endif
+</div>
             <h4 class="user-name">{{ Auth::user()->name }}</h4>
             <p class="user-role">{{ Auth::user()->email }}</p>
         </div>

@@ -555,68 +555,95 @@
         }
 
         /* Media queries */
-        @media (max-width: 991px) {
-            .navbar-collapse {
-                background: var(--white);
-                padding: 15px;
-                box-shadow: 0 10px 15px rgba(0,0,0,0.05);
-                border-radius: 10px;
-                margin-top: 10px;
-            }
+       /* Responsive general */
+@media (max-width: 992px) {
+    .navbar .action-buttons {
+        display: none;
+    }
 
-            .action-buttons {
-                margin-top: 15px;
-            }
+    .hero h1 {
+        font-size: 2.2rem;
+    }
 
-            .action-buttons .btn {
-                margin: 5px;
-                display: block;
-                width: 100%;
-            }
-        }
+    .hero p.lead {
+        font-size: 1.1rem;
+    }
 
-        @media (max-width: 768px) {
-            .hero {
-                padding: 60px 0 40px;
-            }
+    .cta-buttons .btn {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
 
-            .hero h1 {
-                font-size: 2.2rem;
-            }
+    .hero-image-container {
+        padding: 0;
+    }
 
-            .section {
-                padding: 50px 0;
-            }
+    .section h2 {
+        font-size: 1.75rem;
+    }
 
-            .footer {
-                padding: 50px 0 20px;
-            }
+    .section .lead {
+        font-size: 1rem;
+    }
+}
 
-            .footer-widget {
-                margin-bottom: 30px;
-            }
-        }
+@media (max-width: 768px) {
+    .hero {
+        padding: 70px 20px 50px;
+    }
 
-        @media (max-width: 576px) {
-            .hero h1 {
-                font-size: 1.8rem;
-            }
+    .hero h1 {
+        font-size: 1.8rem;
+    }
 
-            .hero p.lead {
-                font-size: 1rem;
-            }
+    .hero p.lead {
+        font-size: 1rem;
+    }
 
-            .section h2 {
-                font-size: 1.5rem;
-                margin-bottom: 30px;
-            }
+    .hero img {
+        max-width: 100%;
+        height: auto;
+    }
 
-            .cta-buttons .btn {
-                display: block;
-                width: 100%;
-                margin: 0 0 15px;
-            }
-        }
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cta-buttons .btn {
+        width: 90%;
+        max-width: 300px;
+        margin: 0.5rem auto;
+    }
+
+    .services .card,
+    .benefits .benefit-item {
+        margin-bottom: 20px;
+    }
+
+    .feature-list .list-group-item {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero h1 {
+        font-size: 1.5rem;
+    }
+
+    .hero p.lead {
+        font-size: 0.95rem;
+    }
+
+    .section h2 {
+        font-size: 1.5rem;
+    }
+
+    .section .lead {
+        font-size: 0.9rem;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -749,7 +776,7 @@
                         <div class="row align-items-center mt-5">
                             <div class="col-md-6 mb-4 mb-md-0">
                                 <div class="about-image text-center">
-                                    <img src="/api/placeholder/400/320" alt="Gestión de tareas" class="img-fluid rounded-3 shadow-sm">
+                                    <img src="/img/tareas.jpg" alt="Gestión de tareas" class="img-fluid rounded-3 shadow-sm">
                                 </div>
                             </div>
                             <div class="col-md-6">

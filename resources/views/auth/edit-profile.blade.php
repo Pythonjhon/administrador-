@@ -141,13 +141,30 @@
 
     <div class="content">
         <h2 class="mb-4">Editar Perfil</h2>
+        
+        <!-- Mostrar mensajes de éxito -->
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        
+        <!-- Mostrar errores de validación -->
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
         @endif
 
         <div class="profile-container">
             <div class="profile-pic">
-                <img src="{{ asset('storage/' . $user->image) }}" alt="Imagen de perfil">
+                @if($user->image)
+                    <img src="{{ asset('storage/' . $user->image) }}" alt="Imagen de perfil">
+                @else
+                    <img src="{{ asset('images/default-profile.png') }}" alt="Imagen predeterminada">
+                @endif
             </div>
             <div>
                 <h4>{{ $user->name }}</h4>
@@ -160,28 +177,58 @@
                 @csrf
                 <div class="mb-3">
                     <label class="form-label">Nombre:</label>
-                    <input type="text" name="name" class="form-control" value="{{ $user->name }}" required>
+                    <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Email:</label>
-                    <input type="email" name="email" class="form-control" value="{{ $user->email }}" required>
+                    <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Teléfono:</label>
-                    <input type="text" name="phone" class="form-control" value="{{ $user->phone }}" required>
+                    <input type="text" name="phone" class="form-control" value="{{ old('phone', $user->phone) }}" pattern="\d*" maxlength="20" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Dirección:</label>
-                    <input type="text" name="address" class="form-control" value="{{ $user->address }}" required>
+                    <input type="text" name="address" class="form-control" value="{{ old('address', $user->address) }}" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Imagen de Perfil:</label>
-                    <input type="file" name="image" class="form-control">
+                    <input type="file" name="image" id="image" class="form-control" accept="image/*">
+                    <div class="image-preview mt-2">
+                        <p>Imagen actual:</p>
+                        @if($user->image)
+                            <img src="{{ asset('storage/' . $user->image) }}" class="img-thumbnail" alt="Vista previa" style="max-height: 150px;">
+                        @else
+                            <p class="text-muted">No hay imagen de perfil</p>
+                        @endif
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-success w-100">Actualizar Perfil</button>
-                <a href="{{ route('dashboard') }}" class="btn btn-success w-100 mt-2">Cancelar</a>
+                <a href="{{ route('dashboard') }}" class="btn btn-secondary w-100 mt-2">Cancelar</a>
             </form>
         </div>
     </div>
+
+    <!-- JavaScript para previsualizar la imagen -->
+    <script>
+        document.getElementById('image').onchange = function(e) {
+            const preview = document.querySelector('.image-preview');
+            preview.innerHTML = '<p>Vista previa de la nueva imagen:</p>';
+            
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'img-thumbnail';
+                    img.style.maxHeight = '150px';
+                    preview.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        };
+    </script>
 </body>
+
 </html>

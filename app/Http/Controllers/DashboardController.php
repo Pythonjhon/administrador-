@@ -42,46 +42,53 @@ class DashboardController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request)
-{
-    $user = Auth::user(); // Obtiene el usuario autenticado
-
-    if (!$user) {
-        return redirect()->route('dashboard')->with('error', 'Usuario no encontrado.');
-    }
-
-    // Validación de los datos
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email,' . $user->id,
-        'password' => 'nullable|min:6|confirmed',
-        'phone' => 'nullable|string|max:20',
-        'address' => 'nullable|string|max:255',
-        'job' => 'nullable|string|max:255',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
-
-    // Si el usuario subió una nueva imagen, la almacenamos
-    if ($request->hasFile('image')) {
-        // Eliminamos la imagen anterior si existe
-        if ($user->image) {
-            Storage::delete('public/' . $user->image);
+    {
+        $user = Auth::user(); // Obtiene el usuario autenticado
+    
+        if (!$user) {
+            return redirect()->route('dashboard')->with('error', 'Usuario no encontrado.');
         }
-        // Guardamos la nueva imagen
-        $validatedData['image'] = $request->file('image')->store('profile_images', 'public');
+    
+        // Validación de los datos
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|min:6|confirmed',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:255',
+            'job' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+        // Si el usuario subió una nueva imagen, la almacenamos
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            // Eliminamos la imagen anterior si existe
+            if ($user->image) {
+                Storage::delete('public/' . $user->image);
+            }
+            
+            // Guardamos la nueva imagen y obtenemos la ruta relativa
+            $imagePath = $request->file('image')->store('profile_images', 'public');
+            
+            // Aseguramos que la ruta se guarde correctamente sin 'public/'
+            $validatedData['image'] = $imagePath;
+            
+            // Para debugging
+            \Log::info('Nueva imagen guardada: ' . $imagePath);
+        }
+    
+        // Si hay contraseña, la encriptamos antes de actualizar
+        if ($request->filled('password')) {
+            $validatedData['password'] = bcrypt($request->password);
+        } else {
+            unset($validatedData['password']); // Eliminamos la clave si no se actualiza
+        }
+    
+        // Actualizamos los datos del usuario
+        $user->update($validatedData);
+    
+        return redirect()->route('dashboard')->with('success', 'Perfil actualizado correctamente.');
     }
-
-    // Si hay contraseña, la encriptamos antes de actualizar
-    if ($request->filled('password')) {
-        $validatedData['password'] = bcrypt($request->password);
-    } else {
-        unset($validatedData['password']); // Eliminamos la clave si no se actualiza
-    }
-
-    // Actualizamos los datos del usuario sin usar `save()`
-    User::where('id', $user->id)->update($validatedData);
-
-    return redirect()->route('dashboard')->with('success', 'Perfil actualizado correctamente.');
-}
 
 
     /**

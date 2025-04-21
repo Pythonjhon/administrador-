@@ -95,44 +95,45 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Task $task)
-    {
-        // Validar datos del formulario
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'assigned_to' => 'nullable|exists:users,id',
-            'completed' => 'required|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'archivo' => 'nullable|mimes:pdf,doc,docx,xlsx,csv|max:5120',
-        ]);
+    public function update(Request $request)
+{
+    $user = Auth::user(); // Obtiene el usuario autenticado
 
-        // Actualizar datos de la tarea
-        $task->title = $request->title;
-        $task->description = $request->description;
-        $task->assigned_to = $request->assigned_to;
-        $task->completed = $request->completed;
-
-        // Manejo de la imagen: eliminar la anterior si se sube una nueva
-        if ($request->hasFile('image')) {
-            if ($task->image) {
-                Storage::delete('public/' . $task->image);
-            }
-            $task->image = $request->file('image')->store('tasks', 'public');
-        }
-
-        // Manejo del archivo: eliminar el anterior si se sube uno nuevo
-        if ($request->hasFile('archivo')) {
-            if ($task->archivo) {
-                Storage::delete('public/' . $task->archivo);
-            }
-            $task->archivo = $request->file('archivo')->store('tasks/files', 'public');
-        }
-
-        $task->save();
-
-        return redirect()->route('tasks.index')->with('success', 'Tarea actualizada correctamente.');
+    if (!$user) {
+        return redirect()->route('dashboard')->with('error', 'Usuario no encontrado.');
     }
+
+    // Validación de los datos
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'phone' => 'nullable|string|max:20',
+        'address' => 'nullable|string|max:255',
+        'job' => 'nullable|string|max:255',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    // Actualizar datos básicos
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->phone = $request->phone;
+    $user->address = $request->address;
+    if (isset($request->job)) {
+        $user->job = $request->job;
+    }
+
+    // Manejo de la imagen: eliminar la anterior si se sube una nueva
+    if ($request->hasFile('image') && $request->file('image')->isValid()) {
+        if ($user->image) {
+            Storage::delete('public/' . $user->image);
+        }
+        $user->image = $request->file('image')->store('profile_images', 'public');
+    }
+
+    $user->save();
+
+    return redirect()->route('dashboard')->with('success', 'Perfil actualizado correctamente.');
+}
 
     /**
      * Elimina una tarea y sus archivos asociados.

@@ -123,7 +123,11 @@
     <div class="sidebar">
         <div class="user-info">
             <div class="profile-sidebar-pic">
-                <img src="{{ asset('storage/' . $user->image) }}" alt="Foto de perfil">
+                @if($user->image)
+                    <img src="{{ asset('storage/' . $user->image) }}" alt="Foto de perfil">
+                @else
+                    <img src="{{ asset('images/default-profile.png') }}" alt="Foto de perfil por defecto">
+                @endif
             </div>
             <h5>{{ $user->name }}</h5>
             <p>{{ $user->email }}</p>
@@ -141,15 +145,17 @@
         <h2>Perfil de Usuario</h2>
         <div class="profile-container">
             <div class="profile-pic">
-                <img src="{{ asset('storage/' . $user->image) }}" alt="Foto de perfil">
+                @if($user->image)
+                    <img src="{{ asset('storage/' . $user->image) }}" alt="Foto de perfil">
+                @else
+                    <img src="{{ asset('images/default-profile.png') }}" alt="Foto de perfil por defecto">
+                @endif
             </div>
             <div>
                 <p><strong>Nombre:</strong> {{ $user->name }}</p>
                 <p><strong>Email:</strong> {{ $user->email }}</p>
                 <p><strong>Teléfono:</strong> {{ $user->phone ?? 'No registrado' }}</p>
                 <p><strong>Dirección:</strong> {{ $user->address ?? 'No registrada' }}</p>
-                <p><strong>Trabajo:</strong> {{ $user->job ?? 'No especificado' }}</p>
-                <p><strong>Contacto Alternativo:</strong> {{ $user->contact_number ?? 'No disponible' }}</p>
             </div>
         </div>
         <form action="{{ route('profile.delete') }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');">
