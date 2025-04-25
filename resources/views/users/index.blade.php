@@ -530,7 +530,7 @@
                                 <td>
                                     <div style="display: flex; gap: 5px;">
                                         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">
-                                            Editar
+                                            Ver Usuario
                                         </a>
                                         <a href="{{ route('users.assign-task', $user->id) }}" class="btn btn-outline-primary">
                                             Asignar Tarea

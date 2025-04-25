@@ -261,42 +261,46 @@
 
                 <!-- Vista previa de la imagen -->
                 <div class="text-center">
-                    <img id="imagePreview" src="{{ $admin->profile_picture ? asset('storage/' . $admin->profile_picture) : 'https://via.placeholder.com/140' }}" class="profile-picture" alt="Imagen de perfil">
+                    <img id="imagePreview" src="{{ $admin->profile_image ? asset('storage/' . $admin->profile_image) : 'https://via.placeholder.com/140' }}" class="profile-picture" alt="Imagen de perfil">
                 </div>
 
                 <!-- Subir nueva imagen -->
                 <div class="mb-3">
                     <label class="form-label">Imagen de Perfil:</label>
-                    <input type="file" name="profile_picture" class="form-control" accept="image/*" onchange="previewImage(event)">
+                    <input type="file" name="profile_image" class="form-control" accept="image/*" onchange="previewImage(event)">
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Nombre:</label>
-                    <input type="text" name="name" class="form-control" value="{{ $admin->name }}" required>
+                    <input type="text" name="name" class="form-control" 
+                        value="{{ $admin->name }}" 
+                        pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" 
+                        title="Solo letras y espacios" 
+                        required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Correo Electrónico:</label>
-                    <input type="email" name="email" class="form-control" value="{{ $admin->email }}" required>
+                    <input type="email" name="email" class="form-control" 
+                        value="{{ $admin->email }}" 
+                        required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Teléfono:</label>
-                    <input type="text" name="phone" class="form-control" value="{{ $admin->phone ?? '' }}" required>
+                    <input type="text" name="phone" class="form-control" 
+                        value="{{ $admin->phone ?? '' }}" 
+                        pattern="\d+" 
+                        title="Solo números" 
+                        maxlength="20" 
+                        required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Dirección:</label>
-                    <input type="text" name="address" class="form-control" value="{{ $admin->address ?? '' }}" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Rol de Administrador:</label>
-                    <select name="role" class="form-control" required>
-                        <option value="superadmin" {{ $admin->role == 'superadmin' ? 'selected' : '' }}>Super Administrador</option>
-                        <option value="moderador" {{ $admin->role == 'moderador' ? 'selected' : '' }}>Moderador</option>
-                        <option value="editor" {{ $admin->role == 'editor' ? 'selected' : '' }}>Editor</option>
-                    </select>
+                    <input type="text" name="address" class="form-control" 
+                        value="{{ $admin->address ?? '' }}" 
+                        required>
                 </div>
 
                 <div class="mb-3">
@@ -317,13 +321,14 @@
 
     <script>
         function previewImage(event) {
-            var reader = new FileReader();
-            reader.onload = function(){
-                var output = document.getElementById('imagePreview');
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('imagePreview');
                 output.src = reader.result;
-            }
+            };
             reader.readAsDataURL(event.target.files[0]);
         }
     </script>
 </body>
+
 </html>

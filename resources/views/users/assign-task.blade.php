@@ -443,26 +443,27 @@
                 <a href="{{ route('users.index') }}" class="btn btn-outline-primary">Volver</a>
             </div>
         </div>
-        
+
         <div class="card">
             <div class="card-header">
                 <h2 class="card-title">
-                    @if(isset($user))
+                    @isset($user)
                         Asignar Tarea a {{ $user->name }}
                     @else
                         Asignar Tarea a Usuarios
-                    @endif
+                    @endisset
                 </h2>
             </div>
+
             <div class="card-body">
-                <form method="POST" action="{{ isset($user) ? route('users.assign-task.store', $user->id) : route('users.bulk-assign-task.store') }}" enctype="multipart/form-data">
+                <form method="POST" 
+                      action="{{ isset($user) ? route('users.assign-task.store', $user->id) : route('users.bulk-assign-task.store') }}" 
+                      enctype="multipart/form-data">
                     @csrf
-                    
-                    @if(isset($user))
-                        <!-- Asignación a un solo usuario -->
+
+                    @isset($user)
                         <input type="hidden" name="user_id" value="{{ $user->id }}">
                     @else
-                        <!-- Asignación a múltiples usuarios -->
                         <div class="info-item">
                             <label for="user_ids" class="info-label">Seleccionar Usuarios</label>
                             <div class="info-value">
@@ -477,36 +478,36 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
-                    
+                    @endisset
+
                     <div class="info-item">
                         <label for="title" class="info-label">Título</label>
                         <div class="info-value">
                             <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required>
                         </div>
                     </div>
-                
+
                     <div class="info-item">
                         <label for="description" class="info-label">Descripción</label>
                         <div class="info-value">
                             <textarea class="form-control" id="description" name="description" rows="3">{{ old('description') }}</textarea>
                         </div>
                     </div>
-                
+
                     <div class="info-item">
                         <label for="image" class="info-label">Imagen</label>
                         <div class="info-value">
                             <input type="file" class="form-control" id="image" name="image" accept="image/*">
                         </div>
                     </div>
-                
+
                     <div class="info-item">
                         <label for="archivo" class="info-label">Archivo</label>
                         <div class="info-value">
                             <input type="file" class="form-control" id="archivo" name="archivo" accept=".pdf,.doc,.docx,.xls,.xlsx">
                         </div>
                     </div>
-                
+
                     <div class="info-item">
                         <label class="info-label">Estado</label>
                         <div class="info-value">
@@ -520,7 +521,7 @@
                             </div>
                         </div>
                     </div>
-                
+
                     <div class="action-buttons">
                         <a href="{{ route('users.index') }}" class="btn btn-outline-primary">Cancelar</a>
                         <button type="submit" class="btn btn-primary">
@@ -528,62 +529,53 @@
                         </button>
                     </div>
                 </form>
-                
-                @if(!isset($user))
-                <!-- Formulario para asignar a TODOS los usuarios -->
-                <div class="mt-4 pt-4 border-top">
-                    <h3>Asignar a todos los usuarios</h3>
-                    <p class="text-warning">Esta acción creará la misma tarea para todos los usuarios del sistema.</p>
-                    
-                    <form method="POST" action="{{ route('users.assign-task-all') }}" id="assignToAllForm" enctype="multipart/form-data">
-                        @csrf
-                        <!-- Los campos se copiarán del formulario principal -->
-                        <input type="hidden" id="copy-title" name="title">
-                        <input type="hidden" id="copy-description" name="description">
-                        <!-- No se pueden copiar los archivos automáticamente, tendrían que subirse en ambos formularios -->
-                        <input type="hidden" id="copy-completed" name="completed" value="0">
-                        
-                        <button type="button" id="copyAndSubmit" class="btn btn-warning">
-                            Asignar a TODOS los usuarios
-                        </button>
-                    </form>
-                </div>
-                
-                <script>
-                    // Script para manejar la selección de usuarios
-                    document.getElementById('selectAll').addEventListener('click', function() {
-                        var options = document.getElementById('user_ids').options;
-                        for (var i = 0; i < options.length; i++) {
-                            options[i].selected = true;
-                        }
-                    });
-                    
-                    document.getElementById('deselectAll').addEventListener('click', function() {
-                        var options = document.getElementById('user_ids').options;
-                        for (var i = 0; i < options.length; i++) {
-                            options[i].selected = false;
-                        }
-                    });
-                    
-                    // Script para copiar datos al formulario de "asignar a todos"
-                    document.getElementById('copyAndSubmit').addEventListener('click', function() {
-                        if (confirm('¿Estás seguro de que deseas asignar esta tarea a TODOS los usuarios del sistema?')) {
-                            // Copiar valores del formulario principal
-                            document.getElementById('copy-title').value = document.getElementById('title').value;
-                            document.getElementById('copy-description').value = document.getElementById('description').value;
-                            
-                            // Obtener valor de radio button
-                            var completedValue = document.querySelector('input[name="completed"]:checked').value;
-                            document.getElementById('copy-completed').value = completedValue;
-                            
-                            // Enviar formulario
-                            document.getElementById('assignToAllForm').submit();
-                        }
-                    });
-                </script>
-                @endif
+
+                @unless(isset($user))
+                    <div class="mt-4 pt-4 border-top">
+                        <h3>Asignar a todos los usuarios</h3>
+                        <p class="text-warning">Esta acción creará la misma tarea para todos los usuarios del sistema.</p>
+
+                        <form method="POST" action="{{ route('users.assign-task-all') }}" id="assignToAllForm" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" id="copy-title" name="title">
+                            <input type="hidden" id="copy-description" name="description">
+                            <input type="hidden" id="copy-completed" name="completed" value="0">
+
+                            <button type="button" id="copyAndSubmit" class="btn btn-warning">
+                                Asignar a TODOS los usuarios
+                            </button>
+                        </form>
+                    </div>
+
+                    <script>
+                        document.getElementById('selectAll').addEventListener('click', function () {
+                            const options = document.getElementById('user_ids').options;
+                            for (let option of options) {
+                                option.selected = true;
+                            }
+                        });
+
+                        document.getElementById('deselectAll').addEventListener('click', function () {
+                            const options = document.getElementById('user_ids').options;
+                            for (let option of options) {
+                                option.selected = false;
+                            }
+                        });
+
+                        document.getElementById('copyAndSubmit').addEventListener('click', function () {
+                            if (confirm('¿Estás seguro de que deseas asignar esta tarea a TODOS los usuarios del sistema?')) {
+                                document.getElementById('copy-title').value = document.getElementById('title').value;
+                                document.getElementById('copy-description').value = document.getElementById('description').value;
+                                const completed = document.querySelector('input[name="completed"]:checked').value;
+                                document.getElementById('copy-completed').value = completed;
+                                document.getElementById('assignToAllForm').submit();
+                            }
+                        });
+                    </script>
+                @endunless
             </div>
         </div>
     </div>
 </body>
+
 </html>

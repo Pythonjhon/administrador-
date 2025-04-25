@@ -470,24 +470,24 @@
                         </div>
                     </div>
                     
-                    <div class="info-item">
+                    <!-- <div class="info-item">
                         <label for="password" class="info-label">Contraseña:</label>
                         <div class="info-value">
                             <input type="password" class="form-control" id="password" name="password" placeholder="Dejar en blanco para mantener la actual">
                             <small style="color: #666; display: block; margin-top: 5px;">Opcional - Completar solo si desea cambiar la contraseña</small>
                         </div>
-                    </div>
+                    </div> -->
                     
-                    <div class="info-item">
+                    <!-- <div class="info-item">
                         <label for="password_confirmation" class="info-label">Confirmar:</label>
                         <div class="info-value">
                             <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
                         </div>
-                    </div>
+                    </div> -->
                     
                     <div class="action-buttons">
                         <a href="{{ route('users.index') }}" class="btn btn-outline-primary">Cancelar</a>
-                        <button type="submit" class="btn btn-primary">Actualizar Usuario</button>
+                        <button type="submit" class="btn btn-primary">Inicio</button>
                     </div>
                 </form>
             </div>

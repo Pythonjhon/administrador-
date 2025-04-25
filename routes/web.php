@@ -142,16 +142,26 @@ Route::prefix('admin')->name('admin.')->group(function () {
  * - Actualiza la información de un usuario.
  * - Elimina un usuario.
  */
-Route::get('/users', [UserManagementController::class, 'index'])->name('users.index'); // Lista de usuarios
-Route::get('/users/{id}/edit', [UserManagementController::class, 'edit'])->name('users.edit'); // Formulario de edición
-Route::put('/users/{id}', [UserManagementController::class, 'update'])->name('users.update'); // Actualización de usuario
-Route::delete('/users/{id}', [UserManagementController::class, 'destroy'])->name('users.delete'); // Eliminación de usuario
+Route::middleware('auth:admin')->group(function () {
+    // Lista de usuarios
+    Route::get('/users', [UserManagementController::class, 'index'])->name('users.index');
 
+    // CRUD de usuarios
+    Route::get('/users/{id}/edit', [UserManagementController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{id}', [UserManagementController::class, 'update'])->name('users.update');
+    Route::delete('/users/{id}', [UserManagementController::class, 'destroy'])->name('users.delete');
+
+    // Asignación de tareas
+    Route::get('/users/{id}/assign-task', [UserManagementController::class, 'assignTaskForm'])->name('users.assign-task');
+    Route::post('/users/{id}/assign-task', [UserManagementController::class, 'assignTask'])->name('users.assign-task.store');
+});
 /**
  * Rutas para la asignación de tareas a usuarios
  * 
  * - Muestra el formulario para asignar una tarea a un usuario.
  * - Procesa la asignación de una tarea al usuario.
  */
-Route::get('/users/{id}/assign-task', [UserManagementController::class, 'assignTaskForm'])->name('users.assign-task'); // Formulario de asignación de tareas
-Route::post('/users/{id}/assign-task', [UserManagementController::class, 'assignTask'])->name('users.assign-task.store'); // Procesa la asignación de tarea
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/users/{id}/assign-task', [UserManagementController::class, 'assignTaskForm'])->name('users.assign-task');
+    Route::post('/users/{id}/assign-task', [UserManagementController::class, 'assignTask'])->name('users.assign-task.store');
+});
